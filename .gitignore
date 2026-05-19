@@ -42,6 +42,9 @@ outputs/
 logs/
 *.log
 
+# Personal kanban board (not shared with team)
+kanban.json
+
 # OS
 .DS_Store
 Thumbs.db

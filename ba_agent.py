@@ -20,6 +20,8 @@ import textwrap
 from pathlib import Path
 from urllib import error, request
 
+from kanban_manager import KanbanBoard
+
 
 DEFAULT_MODEL = "llama3.1"
 DEFAULT_OLLAMA_URL = "http://localhost:11434/api/generate"
@@ -267,30 +269,35 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Local Business Analyst agent powered by Ollama"
     )
-    parser.add_argument(
+
+    subparsers = parser.add_subparsers(dest="command", help="Command to run")
+
+    # Analysis commands (original functionality)
+    analysis_parser = subparsers.add_parser("analyze", help="Analyze meeting notes")
+    analysis_parser.add_argument(
         "task",
         choices=["summarize", "decisions", "requirements", "update-brd", "all"],
         help="BA task to run",
     )
-    parser.add_argument("--input", required=True, help="Path to meeting notes (.txt/.md)")
-    parser.add_argument(
+    analysis_parser.add_argument("--input", required=True, help="Path to meeting notes (.txt/.md)")
+    analysis_parser.add_argument(
         "--brd", help="Path to existing BRD file (required for update-brd task)"
     )
-    parser.add_argument(
+    analysis_parser.add_argument(
         "--output",
         help="Output file path. If omitted, result is printed to console.",
     )
-    parser.add_argument(
+    analysis_parser.add_argument(
         "--model",
         default=os.getenv("BA_AGENT_MODEL", DEFAULT_MODEL),
         help=f"Ollama model name (default: {DEFAULT_MODEL})",
     )
-    parser.add_argument(
+    analysis_parser.add_argument(
         "--url",
         default=os.getenv("BA_AGENT_OLLAMA_URL", DEFAULT_OLLAMA_URL),
         help=f"Ollama API URL (default: {DEFAULT_OLLAMA_URL})",
     )
-    parser.add_argument(
+    analysis_parser.add_argument(
         "--wiki-root",
         default=os.getenv("BA_AGENT_WIKI_ROOT", DEFAULT_WIKI_ROOT),
         help=(
@@ -298,6 +305,41 @@ def build_parser() -> argparse.ArgumentParser:
             f"(default: {DEFAULT_WIKI_ROOT})"
         ),
     )
+
+    # Kanban commands (new functionality)
+    subparsers.add_parser("today", help="Show today's to-do list")
+
+    subparsers.add_parser("board", help="Show full kanban board")
+
+    summary_parser = subparsers.add_parser("add-summary", help="Add daily summary")
+    summary_parser.add_argument("--did", required=True, help="What I did today")
+    summary_parser.add_argument("--need", required=True, help="What I need to do")
+
+    task_parser = subparsers.add_parser("add-task", help="Add a new task")
+    task_parser.add_argument("title", help="Task title")
+    task_parser.add_argument("--description", default="", help="Task description")
+    task_parser.add_argument(
+        "--status",
+        choices=["backlog", "todo", "in_progress", "done"],
+        default="backlog",
+        help="Task status (default: backlog)",
+    )
+    task_parser.add_argument(
+        "--priority",
+        choices=["high", "medium", "low"],
+        default="medium",
+        help="Task priority (default: medium)",
+    )
+    task_parser.add_argument("--tags", nargs="*", default=[], help="Task tags")
+
+    update_parser = subparsers.add_parser("update-task", help="Update task status")
+    update_parser.add_argument("task_id", help="Task ID (e.g., TASK-001)")
+    update_parser.add_argument(
+        "status",
+        choices=["backlog", "todo", "in_progress", "done"],
+        help="New status",
+    )
+
     return parser
 
 
@@ -306,24 +348,72 @@ def main() -> int:
     args = parser.parse_args()
 
     try:
-        notes = read_text_file(args.input)
-        brd = read_text_file(args.brd) if args.brd else None
+        # Kanban commands
+        if args.command == "today":
+            board = KanbanBoard()
+            print(board.format_today())
+            return 0
 
-        if args.task == "update-brd" and not brd:
-            parser.error("--brd is required when task is 'update-brd'")
+        if args.command == "board":
+            board = KanbanBoard()
+            print(board.format_board())
+            return 0
 
-        os.environ["BA_AGENT_WIKI_ROOT"] = args.wiki_root
+        if args.command == "add-summary":
+            board = KanbanBoard()
+            board.add_daily_summary(args.did, args.need)
+            print("✅ Daily summary added!")
+            print("\nYour updated to-do list:")
+            print(board.format_today())
+            return 0
 
-        client = OllamaClient(model=args.model, url=args.url)
-        result = run_task(client, args.task, notes=notes, brd=brd)
+        if args.command == "add-task":
+            board = KanbanBoard()
+            task = board.add_task(
+                args.title,
+                args.description,
+                args.status,  # type: ignore
+                args.priority,
+                args.tags,
+            )
+            print(f"✅ Task added: {task.task_id} - {task.title}")
+            return 0
 
-        if args.output:
-            write_text_file(args.output, result)
-            print(f"Output written to: {args.output}")
-        else:
-            print(result)
+        if args.command == "update-task":
+            board = KanbanBoard()
+            task = board.update_task_status(args.task_id, args.status)  # type: ignore
+            if task:
+                print(f"✅ Task updated: {task.task_id} → {args.status.upper()}")
+            else:
+                print(f"❌ Task not found: {args.task_id}")
+                return 1
+            return 0
 
-        return 0
+        # Analysis commands (original functionality)
+        if args.command == "analyze":
+            notes = read_text_file(args.input)
+            brd = read_text_file(args.brd) if hasattr(args, 'brd') and args.brd else None
+
+            if args.task == "update-brd" and not brd:
+                parser.error("--brd is required when task is 'update-brd'")
+
+            os.environ["BA_AGENT_WIKI_ROOT"] = args.wiki_root
+
+            client = OllamaClient(model=args.model, url=args.url)
+            result = run_task(client, args.task, notes=notes, brd=brd)
+
+            if args.output:
+                write_text_file(args.output, result)
+                print(f"Output written to: {args.output}")
+            else:
+                print(result)
+
+            return 0
+
+        # No command specified
+        parser.print_help()
+        return 1
+
     except Exception as exc:  # noqa: BLE001
         print(f"Error: {exc}", file=sys.stderr)
         return 1
