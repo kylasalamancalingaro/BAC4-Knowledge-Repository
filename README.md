@@ -41,35 +41,46 @@ python ba_agent.py --help
 
 ### Personal Kanban Commands
 
-#### View Today's To-Do List
+#### Add a Task (TODO)
 ```bash
-python ba_agent.py today
+# Interactive mode - agent asks for details
+python ba_agent.py todo "Review data model"
+
+# Quick mode with all details
+python ba_agent.py todo "Update BRD" \
+  --project "Alpha Project" \
+  --sprint \
+  --details "Incorporate feedback" \
+  --deadline "2026-05-25"
 ```
 
-#### Add Daily Summary
+#### View Tasks (LIST)
 ```bash
-python ba_agent.py add-summary \
-  --did "What I accomplished today" \
-  --need "What I need to do next"
+# Show TO-DO and DOING tasks
+python ba_agent.py list
+
+# Show all tasks including DONE
+python ba_agent.py list all
 ```
 
-#### View Full Board
+#### Mark Task Complete (DONE)
 ```bash
-python ba_agent.py board
+# Interactive - shows active tasks and asks which one
+python ba_agent.py done
+
+# Direct - mark specific task as done
+python ba_agent.py done TASK-001
 ```
 
-#### Task Management
+#### Daily Summary
 ```bash
-# Add a task
-python ba_agent.py add-task "Review ADR-008" \
-  --description "Provide feedback on report strategy" \
-  --status todo \
-  --priority high \
-  --tags documentation adr
+# Interactive mode
+python ba_agent.py summary
 
-# Update task status
-python ba_agent.py update-task TASK-001 in_progress
-python ba_agent.py update-task TASK-001 done
+# Quick mode
+python ba_agent.py summary \
+  --did "Completed ADR review" \
+  --need "Update delivery gates"
 ```
 
 See [KANBAN_USAGE.md](KANBAN_USAGE.md) for detailed kanban board usage.
@@ -140,8 +151,8 @@ The kanban board uses markdown format, so you can:
 
 ### Daily Morning Routine
 ```bash
-# Check what you should work on today
-python ba_agent.py today
+# Check your active tasks
+python ba_agent.py list
 ```
 
 ### After a Meeting
@@ -150,15 +161,18 @@ python ba_agent.py today
 python ba_agent.py analyze all --input meeting_notes.txt --output outputs/meeting_analysis.md
 
 # Add any new tasks that came up
-python ba_agent.py add-task "Follow up on API design" --status todo --priority high
+python ba_agent.py todo "Follow up on API design" --sprint --deadline "2026-05-24"
 ```
 
 ### End of Day
 ```bash
+# Mark completed tasks
+python ba_agent.py done
+
 # Log your daily summary
-python ba_agent.py add-summary \
-  --did "Reviewed ADR-008, attended planning meeting, updated BRD" \
-  --need "Schedule stakeholder sync, complete data model review"
+python ba_agent.py summary \
+  --did "Reviewed ADR-008, attended planning meeting" \
+  --need "Complete data model review, schedule stakeholder sync"
 ```
 
 ## Development

@@ -1,115 +1,195 @@
 # Personal Kanban Board - Usage Guide
 
-Your BA Agent now includes a personal kanban board to track your daily work. This is stored locally and **not shared** with the team.
+Your BA Agent now includes a personal kanban board with three simple sections: **TO-DO**, **DOING**, and **DONE**.
 
-## Quick Start
+## 📋 Quick Commands
 
-### View Today's To-Do List
+### 1. TODO - Add a Task
+
+Add a new task to your TO-DO list. The agent will ask you for details:
+
 ```bash
-python ba_agent.py today
+python ba_agent.py todo "Review data model design"
 ```
 
-This shows:
-- 🔄 Tasks currently in progress
-- 📋 Tasks in your to-do list
-- 📝 Your latest daily summary
+You'll be prompted for:
+- **Project Name**: Which project does this belong to?
+- **Sprint Item (Y/N)**: Is this part of the current sprint?
+- **Details**: Additional information about the task
+- **Deadline**: When is it due? (YYYY-MM-DD format)
 
-### Add Daily Summary
+**Quick add with all details:**
 ```bash
-python ba_agent.py add-summary \
-  --did "Reviewed ADR-008, attended team sync, updated delivery gates" \
-  --need "Complete data ownership docs, schedule stakeholder meeting"
+python ba_agent.py todo "Update BRD" \
+  --project "Alpha Project" \
+  --sprint \
+  --details "Incorporate stakeholder feedback from meeting" \
+  --deadline "2026-05-25"
 ```
 
-Use this at the end of your day to capture what you accomplished and what's coming next.
+### 2. LIST - Show Active Tasks
 
-### View Full Kanban Board
+View your TO-DO and DOING tasks:
+
 ```bash
-python ba_agent.py board
+python ba_agent.py list
 ```
 
-Shows all tasks across all columns: Backlog → To Do → In Progress → Done
+### 2a. LIST ALL - Show All Tasks
 
-## Task Management
+View all tasks including completed ones:
 
-### Add a New Task
 ```bash
-# Basic task
-python ba_agent.py add-task "Review data model design"
-
-# With details
-python ba_agent.py add-task "Update BRD for project Alpha" \
-  --description "Incorporate feedback from stakeholder meeting" \
-  --status todo \
-  --priority high \
-  --tags requirements documentation
+python ba_agent.py list all
 ```
 
-**Status options**: `backlog`, `todo`, `in_progress`, `done`  
-**Priority options**: `high`, `medium`, `low`
+### 3. DONE - Mark Task Complete
 
-### Update Task Status
+Mark a task as done:
+
 ```bash
-# Move task to in-progress
-python ba_agent.py update-task TASK-001 in_progress
-
-# Mark task as done
-python ba_agent.py update-task TASK-001 done
+python ba_agent.py done TASK-001
 ```
 
-## Typical Daily Workflow
+Or run without the task ID and the agent will show you your active tasks and ask which one you completed:
 
-### Morning
 ```bash
-# Check what you should be working on today
-python ba_agent.py today
+python ba_agent.py done
 ```
 
-### During the Day
-```bash
-# Start working on a task
-python ba_agent.py update-task TASK-003 in_progress
+## 📝 Daily Summary
 
-# Add new tasks as they come up
-python ba_agent.py add-task "Prepare Q2 metrics report" --status todo --priority high
+Track what you did and what's next:
+
+```bash
+python ba_agent.py summary
 ```
 
-### End of Day
-```bash
-# Log your daily summary
-python ba_agent.py add-summary \
-  --did "Completed BRD review, drafted technical requirements for Feature X" \
-  --need "Schedule follow-up with PM, review API specifications"
+You'll be prompted for:
+- What did you do today?
+- What do you need to do next?
 
-# This automatically shows your updated to-do list
+**Quick summary:**
+```bash
+python ba_agent.py summary \
+  --did "Reviewed ADR-008, attended team sync" \
+  --need "Complete data ownership docs"
 ```
 
-## Data Storage
+## 🎯 Typical Workflow
 
-- All kanban data is stored in `kanban.md` in your local repository
-- This file is in **markdown format** - you can view and edit it manually
-- This file is **excluded from git** (in `.gitignore`)
-- Your personal tasks remain private and are not shared with the team
+### Morning - Check Your Tasks
+```bash
+python ba_agent.py list
+```
 
-### Manual Editing
+### During the Day - Add Tasks as They Come
+```bash
+# Quick add
+python ba_agent.py todo "Schedule stakeholder meeting"
 
-You can open `kanban.md` in any text editor or markdown viewer to:
-- View your board in a readable format
-- Manually add or edit tasks
-- Review your daily summaries
-- Copy/paste tasks between sections
+# Or with details for sprint work
+python ba_agent.py todo "Implement validation rules" \
+  --project "Data Platform" \
+  --sprint \
+  --deadline "2026-05-22"
+```
 
-The markdown format makes it easy to integrate with other tools or just read directly.
+### Mark Progress
+When you start working on a task, you can manually move it to DOING by editing `kanban.md`, or just mark it DONE when finished:
 
-## Task Organization Tips
+```bash
+python ba_agent.py done TASK-003
+```
 
-**Backlog**: Future work, ideas, things to consider  
-**To Do**: Prioritized tasks ready to start  
-**In Progress**: What you're actively working on (keep this small!)  
-**Done**: Completed work (helps track accomplishments)
+### End of Day - Log Summary
+```bash
+python ba_agent.py summary
+```
 
-## Priority Guidelines
+## 📂 Kanban Board Sections
 
-🔴 **High**: Urgent, deadline-driven, blocking others  
-🟡 **Medium**: Important but not urgent (default)  
-🟢 **Low**: Nice-to-have, background tasks
+**📋 TO-DO**: Tasks waiting to be started (sorted by deadline)  
+**🔄 DOING**: Tasks you're actively working on  
+**✅ DONE**: Completed tasks (shows last 30)
+
+## 🏃 Sprint Items
+
+Mark important sprint tasks with the `--sprint` flag. They'll show up with a 🏃 marker in your list:
+
+```bash
+python ba_agent.py todo "Critical bug fix" --sprint
+```
+
+## 📅 Deadlines
+
+Tasks with deadlines appear at the top of your TO-DO list:
+
+```bash
+python ba_agent.py todo "Submit report" --deadline "2026-05-20"
+```
+
+## 🔒 Privacy
+
+Your `kanban.md` file:
+- Stored locally in your repository
+- Excluded from git (in `.gitignore`)
+- Viewable in any markdown viewer
+- Manually editable in any text editor
+
+## 💡 Tips
+
+1. **Keep DOING small**: Only have 1-3 tasks in progress at a time
+2. **Use deadlines**: Help prioritize your TO-DO list
+3. **Mark sprint items**: Easily see what's time-sensitive
+4. **Daily summaries**: Build a record of your progress
+5. **Manual editing**: Open `kanban.md` to quickly reorganize tasks
+
+## 📄 Example Kanban Board
+
+```markdown
+# 📊 Personal Kanban Board
+
+## 📋 TO-DO
+
+- [ ] **[TASK-001]** Review ADR-008 🏃
+  - **Project:** Documentation
+  - **Sprint Item:** Yes
+  - **Details:** Provide feedback on report strategy
+  - **Deadline:** 2026-05-22
+  - **Created:** 2026-05-19
+
+- [ ] **[TASK-002]** Schedule stakeholder meeting
+  - **Project:** Alpha Project
+  - **Sprint Item:** No
+  - **Deadline:** 2026-05-25
+  - **Created:** 2026-05-19
+
+## 🔄 DOING
+
+- [ ] **[TASK-003]** Update data model
+  - **Project:** Data Platform
+  - **Sprint Item:** Yes
+  - **Details:** Add validation rules
+  - **Created:** 2026-05-18
+
+## ✅ DONE
+
+- [x] **[TASK-004]** Review API specifications
+  - **Project:** Integration
+  - **Sprint Item:** No
+  - **Created:** 2026-05-17
+  - **Completed:** 2026-05-19
+```
+
+## 🚀 Command Reference
+
+| Command | Description | Interactive? |
+|---------|-------------|--------------|
+| `todo` | Add task to TO-DO | Yes (if args not provided) |
+| `list` | Show TO-DO and DOING tasks | No |
+| `list all` | Show all tasks including DONE | No |
+| `done` | Mark task as DONE | Yes (if task ID not provided) |
+| `summary` | Add daily summary | Yes (if args not provided) |
+
+All commands can be run interactively (agent asks questions) or with command-line arguments for automation.

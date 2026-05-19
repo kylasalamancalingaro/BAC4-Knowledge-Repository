@@ -307,92 +307,167 @@ def build_parser() -> argparse.ArgumentParser:
     )
 
     # Kanban commands (new functionality)
-    subparsers.add_parser("today", help="Show today's to-do list")
+    todo_parser = subparsers.add_parser("todo", help="Add a new task to TO-DO list")
+    todo_parser.add_argument("title", nargs="*", help="Task title")
+    todo_parser.add_argument("--project", help="Project name")
+    todo_parser.add_argument("--sprint", action="store_true", help="Is this a sprint item?")
+    todo_parser.add_argument("--details", help="Task details")
+    todo_parser.add_argument("--deadline", help="Deadline (YYYY-MM-DD)")
 
-    subparsers.add_parser("board", help="Show full kanban board")
+    list_parser = subparsers.add_parser("list", help="Show TO-DO and DOING tasks")
+    list_parser.add_argument("all", nargs="?", help="Show all tasks including DONE")
 
-    summary_parser = subparsers.add_parser("add-summary", help="Add daily summary")
-    summary_parser.add_argument("--did", required=True, help="What I did today")
-    summary_parser.add_argument("--need", required=True, help="What I need to do")
+    done_parser = subparsers.add_parser("done", help="Mark a task as DONE")
+    done_parser.add_argument("task_id", nargs="?", help="Task ID (e.g., TASK-001)")
 
-    task_parser = subparsers.add_parser("add-task", help="Add a new task")
-    task_parser.add_argument("title", help="Task title")
-    task_parser.add_argument("--description", default="", help="Task description")
-    task_parser.add_argument(
-        "--status",
-        choices=["backlog", "todo", "in_progress", "done"],
-        default="backlog",
-        help="Task status (default: backlog)",
-    )
-    task_parser.add_argument(
-        "--priority",
-        choices=["high", "medium", "low"],
-        default="medium",
-        help="Task priority (default: medium)",
-    )
-    task_parser.add_argument("--tags", nargs="*", default=[], help="Task tags")
-
-    update_parser = subparsers.add_parser("update-task", help="Update task status")
-    update_parser.add_argument("task_id", help="Task ID (e.g., TASK-001)")
-    update_parser.add_argument(
-        "status",
-        choices=["backlog", "todo", "in_progress", "done"],
-        help="New status",
-    )
+    summary_parser = subparsers.add_parser("summary", help="Add daily summary")
+    summary_parser.add_argument("--did", help="What I did today")
+    summary_parser.add_argument("--need", help="What I need to do")
 
     return parser
 
 
 def main() -> int:
+    # Fix Windows console encoding for emojis
+    if sys.platform == "win32":
+        sys.stdout.reconfigure(encoding="utf-8")  # type: ignore
+
     parser = build_parser()
     args = parser.parse_args()
 
     try:
-        # Kanban commands
-        if args.command == "today":
+        # Kanban command: TODO
+        if args.command == "todo":
             board = KanbanBoard()
-            print(board.format_today())
-            return 0
 
-        if args.command == "board":
-            board = KanbanBoard()
-            print(board.format_board())
-            return 0
-
-        if args.command == "add-summary":
-            board = KanbanBoard()
-            board.add_daily_summary(args.did, args.need)
-            print("✅ Daily summary added!")
-            print("\nYour updated to-do list:")
-            print(board.format_today())
-            return 0
-
-        if args.command == "add-task":
-            board = KanbanBoard()
-            task = board.add_task(
-                args.title,
-                args.description,
-                args.status,  # type: ignore
-                args.priority,
-                args.tags,
-            )
-            print(f"✅ Task added: {task.task_id} - {task.title}")
-            return 0
-
-        if args.command == "update-task":
-            board = KanbanBoard()
-            task = board.update_task_status(args.task_id, args.status)  # type: ignore
-            if task:
-                print(f"✅ Task updated: {task.task_id} → {args.status.upper()}")
+            # Get title
+            if args.title:
+                title = " ".join(args.title)
             else:
-                print(f"❌ Task not found: {args.task_id}")
+                try:
+                    title = input("Task title: ").strip()
+                except EOFError:
+                    print("❌ Task title is required")
+                    return 1
+                if not title:
+                    print("❌ Task title is required")
+                    return 1
+
+            # Get project name (interactive if not provided)
+            project = args.project if hasattr(args, "project") and args.project else None
+            if not project and sys.stdin.isatty():
+                try:
+                    project = input("Project name (or press Enter to skip): ").strip()
+                except (EOFError, KeyboardInterrupt):
+                    project = ""
+
+            # Get sprint item flag (interactive if not provided)
+            sprint_item = args.sprint if hasattr(args, "sprint") and args.sprint else False
+            if not sprint_item and sys.stdin.isatty():
+                try:
+                    sprint_input = input("Sprint item? (Y/N): ").strip().lower()
+                    sprint_item = sprint_input in ["y", "yes"]
+                except (EOFError, KeyboardInterrupt):
+                    sprint_item = False
+
+            # Get details (interactive if not provided)
+            details = args.details if hasattr(args, "details") and args.details else None
+            if not details and sys.stdin.isatty():
+                try:
+                    details = input("Details (or press Enter to skip): ").strip()
+                except (EOFError, KeyboardInterrupt):
+                    details = ""
+
+            # Get deadline (interactive if not provided)
+            deadline = args.deadline if hasattr(args, "deadline") and args.deadline else None
+            if not deadline and sys.stdin.isatty():
+                try:
+                    deadline = input("Deadline (YYYY-MM-DD, or press Enter to skip): ").strip()
+                except (EOFError, KeyboardInterrupt):
+                    deadline = ""
+
+            # Add task
+            task = board.add_task(
+                title=title,
+                project_name=project or "",
+                sprint_item=sprint_item,
+                details=details or "",
+                deadline=deadline or "",
+            )
+
+            print(f"\n✅ Task added: [{task.task_id}] {task.title}")
+            if project:
+                print(f"   Project: {project}")
+            if sprint_item:
+                print("   Sprint item: Yes 🏃")
+            if deadline:
+                print(f"   Deadline: {deadline}")
+            return 0
+
+        # Kanban command: LIST
+        if args.command == "list":
+            board = KanbanBoard()
+            include_all = hasattr(args, "all") and args.all == "all"
+            print(board.format_list(include_done=include_all))
+            return 0
+
+        # Kanban command: DONE
+        if args.command == "done":
+            board = KanbanBoard()
+
+            # Get task ID
+            task_id = args.task_id if hasattr(args, "task_id") and args.task_id else None
+            if not task_id:
+                # Show active tasks and ask which one
+                active_tasks = board.get_active_tasks()
+                if not active_tasks:
+                    print("✅ No active tasks to mark as done!")
+                    return 0
+
+                print("Which task did you complete?\n")
+                for task in active_tasks:
+                    sprint_marker = "🏃 " if task.sprint_item else ""
+                    print(f"  [{task.task_id}] {sprint_marker}{task.title}")
+
+                print()
+                task_id = input("Enter task ID: ").strip().upper()
+
+            # Mark as done
+            task = board.mark_done(task_id)
+            if task:
+                print(f"\n🎉 Task completed: [{task.task_id}] {task.title}")
+                print(f"   Completed on: {task.completed_date}")
+            else:
+                print(f"❌ Task not found or already completed: {task_id}")
                 return 1
+            return 0
+
+        # Kanban command: SUMMARY
+        if args.command == "summary":
+            board = KanbanBoard()
+
+            # Get what I did
+            did = args.did if hasattr(args, "did") and args.did else None
+            if not did:
+                did = input("What did you do today? ").strip()
+
+            # Get what I need to do
+            need = args.need if hasattr(args, "need") and args.need else None
+            if not need:
+                need = input("What do you need to do next? ").strip()
+
+            if not did or not need:
+                print("❌ Both fields are required")
+                return 1
+
+            board.add_daily_summary(did, need)
+            print("\n✅ Daily summary added!")
             return 0
 
         # Analysis commands (original functionality)
         if args.command == "analyze":
             notes = read_text_file(args.input)
-            brd = read_text_file(args.brd) if hasattr(args, 'brd') and args.brd else None
+            brd = read_text_file(args.brd) if hasattr(args, "brd") and args.brd else None
 
             if args.task == "update-brd" and not brd:
                 parser.error("--brd is required when task is 'update-brd'")
