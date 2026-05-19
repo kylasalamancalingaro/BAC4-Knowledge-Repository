@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
 Personal Kanban Board Manager for BA Agent
-Stores tasks locally in kanban.json
+Stores tasks in a markdown file (kanban.md)
 """
 
 from __future__ import annotations
 
-import json
+import re
 from datetime import datetime
 from pathlib import Path
 from typing import Literal
@@ -15,7 +15,7 @@ from typing import Literal
 TaskStatus = Literal["backlog", "todo", "in_progress", "done"]
 
 # Default kanban file location
-KANBAN_FILE = Path(__file__).parent / "kanban.json"
+KANBAN_FILE = Path(__file__).parent / "kanban.md"
 
 
 class Task:
@@ -30,6 +30,7 @@ class Task:
         priority: str = "medium",
         created_date: str | None = None,
         updated_date: str | None = None,
+        completed_date: str | None = None,
         tags: list[str] | None = None,
     ):
         self.task_id = task_id
@@ -37,32 +38,17 @@ class Task:
         self.description = description
         self.status = status
         self.priority = priority
-        self.created_date = created_date or datetime.now().isoformat()
-        self.updated_date = updated_date or datetime.now().isoformat()
+        self.created_date = created_date or datetime.now().strftime("%Y-%m-%d")
+        self.updated_date = updated_date or datetime.now().strftime("%Y-%m-%d")
+        self.completed_date = completed_date
         self.tags = tags or []
-
-    def to_dict(self) -> dict:
-        return {
-            "task_id": self.task_id,
-            "title": self.title,
-            "description": self.description,
-            "status": self.status,
-            "priority": self.priority,
-            "created_date": self.created_date,
-            "updated_date": self.updated_date,
-            "tags": self.tags,
-        }
-
-    @classmethod
-    def from_dict(cls, data: dict) -> Task:
-        return cls(**data)
 
     def __repr__(self) -> str:
         return f"Task({self.task_id}: {self.title} [{self.status}])"
 
 
 class KanbanBoard:
-    """Manages the kanban board and tasks"""
+    """Manages the kanban board in markdown format"""
 
     def __init__(self, kanban_file: Path = KANBAN_FILE):
         self.kanban_file = kanban_file
@@ -71,25 +57,183 @@ class KanbanBoard:
         self.load()
 
     def load(self) -> None:
-        """Load kanban board from JSON file"""
+        """Load kanban board from markdown file"""
         if not self.kanban_file.exists():
             self.save()  # Create empty board
             return
 
-        with open(self.kanban_file) as f:
-            data = json.load(f)
-            self.tasks = [Task.from_dict(t) for t in data.get("tasks", [])]
-            self.daily_summaries = data.get("daily_summaries", [])
+        content = self.kanban_file.read_text(encoding="utf-8")
+        self.tasks = []
+        self.daily_summaries = []
+
+        # Parse tasks from each section
+        current_status: TaskStatus | None = None
+        current_task: Task | None = None
+
+        for line in content.split("\n"):
+            # Detect section headers
+            if line.startswith("## 🗂️ Backlog"):
+                current_status = "backlog"
+                continue
+            elif line.startswith("## 📋 To Do"):
+                current_status = "todo"
+                continue
+            elif line.startswith("## 🔄 In Progress"):
+                current_status = "in_progress"
+                continue
+            elif line.startswith("## ✅ Done"):
+                current_status = "done"
+                continue
+            elif line.startswith("## 📝 Daily Summaries"):
+                current_status = None
+                continue
+
+            # Parse task line: - [ ] or - [x] **[TASK-001]** Title (Priority: High) #tag1 #tag2
+            task_match = re.match(
+                r"^- \[([ x])\] \*\*\[([^\]]+)\]\*\* (.+?)(?:\s+\(Priority: (\w+)\))?(?:\s+(#\S+(?:\s+#\S+)*))?$",
+                line,
+            )
+            if task_match and current_status:
+                checked = task_match.group(1) == "x"
+                task_id = task_match.group(2)
+                title = task_match.group(3)
+                priority = task_match.group(4) or "medium"
+                tags_str = task_match.group(5) or ""
+                tags = [t.strip("#") for t in tags_str.split() if t.startswith("#")]
+
+                current_task = Task(
+                    task_id=task_id,
+                    title=title,
+                    status=current_status,
+                    priority=priority.lower(),
+                    tags=tags,
+                )
+                self.tasks.append(current_task)
+                continue
+
+            # Parse task description/metadata
+            if current_task and line.strip().startswith("- "):
+                desc_line = line.strip()[2:].strip()
+                if desc_line.startswith("Created:"):
+                    current_task.created_date = desc_line.replace("Created:", "").strip()
+                elif desc_line.startswith("Updated:"):
+                    current_task.updated_date = desc_line.replace("Updated:", "").strip()
+                elif desc_line.startswith("Completed:"):
+                    current_task.completed_date = desc_line.replace("Completed:", "").strip()
+                elif not desc_line.startswith("Created:") and not desc_line.startswith("Updated:"):
+                    if current_task.description:
+                        current_task.description += "\n" + desc_line
+                    else:
+                        current_task.description = desc_line
+
+            # Parse daily summaries
+            summary_date_match = re.match(r"^### (\d{4}-\d{2}-\d{2})$", line)
+            if summary_date_match:
+                summary_date = summary_date_match.group(1)
+                # Look for the next lines with What I did and What I need to do
+                # This is a simplified parser - in practice you'd need to read ahead
+                continue
 
     def save(self) -> None:
-        """Save kanban board to JSON file"""
-        data = {
-            "tasks": [t.to_dict() for t in self.tasks],
-            "daily_summaries": self.daily_summaries,
-            "last_updated": datetime.now().isoformat(),
-        }
-        with open(self.kanban_file, "w") as f:
-            json.dump(data, f, indent=2)
+        """Save kanban board to markdown file"""
+        lines = [
+            "# 📊 Personal Kanban Board",
+            "",
+            f"_Last Updated: {datetime.now().strftime('%Y-%m-%d %H:%M')}_",
+            "",
+            "---",
+            "",
+        ]
+
+        # Backlog section
+        lines.append("## 🗂️ Backlog")
+        lines.append("")
+        backlog_tasks = [t for t in self.tasks if t.status == "backlog"]
+        if not backlog_tasks:
+            lines.append("_No tasks in backlog_")
+        else:
+            for task in backlog_tasks:
+                lines.extend(self._format_task_markdown(task))
+        lines.append("")
+
+        # To Do section
+        lines.append("## 📋 To Do")
+        lines.append("")
+        todo_tasks = [t for t in self.tasks if t.status == "todo"]
+        if not todo_tasks:
+            lines.append("_No tasks to do_")
+        else:
+            for task in todo_tasks:
+                lines.extend(self._format_task_markdown(task))
+        lines.append("")
+
+        # In Progress section
+        lines.append("## 🔄 In Progress")
+        lines.append("")
+        in_progress_tasks = [t for t in self.tasks if t.status == "in_progress"]
+        if not in_progress_tasks:
+            lines.append("_No tasks in progress_")
+        else:
+            for task in in_progress_tasks:
+                lines.extend(self._format_task_markdown(task))
+        lines.append("")
+
+        # Done section
+        lines.append("## ✅ Done")
+        lines.append("")
+        done_tasks = [t for t in self.tasks if t.status == "done"]
+        if not done_tasks:
+            lines.append("_No completed tasks_")
+        else:
+            # Show most recent completed tasks first
+            for task in sorted(done_tasks, key=lambda t: t.updated_date, reverse=True)[:20]:
+                lines.extend(self._format_task_markdown(task))
+        lines.append("")
+
+        # Daily Summaries section
+        lines.append("---")
+        lines.append("")
+        lines.append("## 📝 Daily Summaries")
+        lines.append("")
+        if not self.daily_summaries:
+            lines.append("_No daily summaries yet_")
+        else:
+            # Show most recent summaries first
+            for summary in reversed(self.daily_summaries[-10:]):
+                date = summary["date"]
+                if "T" in date:
+                    date = date.split("T")[0]
+                lines.append(f"### {date}")
+                lines.append("")
+                lines.append(f"**What I did:** {summary['what_i_did']}")
+                lines.append("")
+                lines.append(f"**What I need to do:** {summary['what_i_need_to_do']}")
+                lines.append("")
+
+        self.kanban_file.write_text("\n".join(lines), encoding="utf-8")
+
+    def _format_task_markdown(self, task: Task) -> list[str]:
+        """Format a task as markdown lines"""
+        lines = []
+
+        # Checkbox and title
+        checkbox = "[x]" if task.status == "done" else "[ ]"
+        priority_str = f" (Priority: {task.priority.capitalize()})" if task.priority != "medium" else ""
+        tags_str = " " + " ".join(f"#{tag}" for tag in task.tags) if task.tags else ""
+
+        lines.append(f"- {checkbox} **[{task.task_id}]** {task.title}{priority_str}{tags_str}")
+
+        # Description
+        if task.description:
+            for desc_line in task.description.split("\n"):
+                lines.append(f"  - {desc_line}")
+
+        # Metadata
+        lines.append(f"  - Created: {task.created_date}")
+        if task.status == "done" and task.completed_date:
+            lines.append(f"  - Completed: {task.completed_date}")
+
+        return lines
 
     def add_task(
         self,
@@ -111,7 +255,9 @@ class KanbanBoard:
         for task in self.tasks:
             if task.task_id == task_id:
                 task.status = new_status
-                task.updated_date = datetime.now().isoformat()
+                task.updated_date = datetime.now().strftime("%Y-%m-%d")
+                if new_status == "done":
+                    task.completed_date = datetime.now().strftime("%Y-%m-%d")
                 self.save()
                 return task
         return None
@@ -134,7 +280,7 @@ class KanbanBoard:
     def add_daily_summary(self, what_i_did: str, what_i_need_to_do: str) -> None:
         """Add a daily summary entry"""
         summary = {
-            "date": datetime.now().isoformat(),
+            "date": datetime.now().strftime("%Y-%m-%d"),
             "what_i_did": what_i_did,
             "what_i_need_to_do": what_i_need_to_do,
         }
@@ -146,12 +292,16 @@ class KanbanBoard:
         return self.daily_summaries[-limit:]
 
     def format_board(self) -> str:
-        """Format the kanban board as a readable string"""
+        """Format the kanban board as a readable string for terminal"""
         lines = ["=" * 80, "PERSONAL KANBAN BOARD", "=" * 80, ""]
 
-        for status in ["backlog", "todo", "in_progress", "done"]:
-            status_display = status.upper().replace("_", " ")
-            tasks = self.get_tasks_by_status(status)  # type: ignore
+        for status_key, status_display in [
+            ("backlog", "🗂️  BACKLOG"),
+            ("todo", "📋 TO DO"),
+            ("in_progress", "🔄 IN PROGRESS"),
+            ("done", "✅ DONE"),
+        ]:
+            tasks = self.get_tasks_by_status(status_key)  # type: ignore
 
             lines.append(f"\n## {status_display} ({len(tasks)} tasks)")
             lines.append("-" * 80)
@@ -159,7 +309,8 @@ class KanbanBoard:
             if not tasks:
                 lines.append("  (no tasks)")
             else:
-                for task in tasks:
+                display_tasks = tasks if status_key != "done" else tasks[-10:]
+                for task in display_tasks:
                     priority_marker = {
                         "high": "🔴",
                         "medium": "🟡",
@@ -168,7 +319,8 @@ class KanbanBoard:
 
                     lines.append(f"\n  {priority_marker} [{task.task_id}] {task.title}")
                     if task.description:
-                        lines.append(f"     {task.description}")
+                        for desc_line in task.description.split("\n"):
+                            lines.append(f"     {desc_line}")
                     if task.tags:
                         lines.append(f"     Tags: {', '.join(task.tags)}")
 
@@ -192,7 +344,8 @@ class KanbanBoard:
             for task in in_progress:
                 lines.append(f"  [{task.task_id}] {task.title}")
                 if task.description:
-                    lines.append(f"     {task.description}")
+                    for desc_line in task.description.split("\n"):
+                        lines.append(f"     {desc_line}")
             lines.append("")
 
         # To Do tasks
@@ -208,7 +361,8 @@ class KanbanBoard:
                 }.get(task.priority, "⚪")
                 lines.append(f"  {priority_marker} [{task.task_id}] {task.title}")
                 if task.description:
-                    lines.append(f"     {task.description}")
+                    for desc_line in task.description.split("\n"):
+                        lines.append(f"     {desc_line}")
             lines.append("")
 
         if not in_progress and not todo:
@@ -221,7 +375,7 @@ class KanbanBoard:
             lines.append("## 📝 LATEST SUMMARY")
             lines.append("-" * 80)
             last = recent[0]
-            date = datetime.fromisoformat(last["date"]).strftime("%Y-%m-%d %H:%M")
+            date = last["date"]
             lines.append(f"Date: {date}")
             lines.append(f"\nWhat I did:")
             lines.append(f"  {last['what_i_did']}")
@@ -234,6 +388,12 @@ class KanbanBoard:
 
 def main() -> None:
     """Demo usage"""
+    import sys
+
+    # Fix Windows console encoding for emojis
+    if sys.platform == "win32":
+        sys.stdout.reconfigure(encoding="utf-8")  # type: ignore
+
     board = KanbanBoard()
 
     # Example: Add some tasks

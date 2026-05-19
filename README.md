@@ -101,7 +101,7 @@ BA-Agent-Local/
 ├── ba_agent.py           # Main agent implementation
 ├── kanban_manager.py     # Kanban board functionality
 ├── pii_masker.py         # PII masking utility
-├── kanban.json           # Your personal task data (not committed to git)
+├── kanban.md             # Your personal task board (markdown, not committed to git)
 ├── outputs/              # Analysis outputs
 ├── KANBAN_USAGE.md       # Detailed kanban usage guide
 ├── README.md             # This file
@@ -126,9 +126,15 @@ export BA_AGENT_WIKI_ROOT=/path/to/Global-Clients.wiki
 
 ### Privacy & Data Storage
 
-- **Kanban data** (`kanban.json`) is stored locally and excluded from git
+- **Kanban data** (`kanban.md`) is stored as markdown locally and excluded from git
 - **Meeting analysis** can output to `outputs/` directory (also excluded from git)
 - **PII masking** is available via `pii_masker.py` for sensitive data
+
+The kanban board uses markdown format, so you can:
+- View it in any markdown viewer
+- Edit it manually in any text editor
+- Copy sections to other documents
+- Keep it readable without the Python script
 
 ## Workflow Examples
 

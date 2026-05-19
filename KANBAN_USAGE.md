@@ -86,9 +86,20 @@ python ba_agent.py add-summary \
 
 ## Data Storage
 
-- All kanban data is stored in `kanban.json` in your local repository
+- All kanban data is stored in `kanban.md` in your local repository
+- This file is in **markdown format** - you can view and edit it manually
 - This file is **excluded from git** (in `.gitignore`)
 - Your personal tasks remain private and are not shared with the team
+
+### Manual Editing
+
+You can open `kanban.md` in any text editor or markdown viewer to:
+- View your board in a readable format
+- Manually add or edit tasks
+- Review your daily summaries
+- Copy/paste tasks between sections
+
+The markdown format makes it easy to integrate with other tools or just read directly.
 
 ## Task Organization Tips
 

@@ -43,7 +43,7 @@ logs/
 *.log
 
 # Personal kanban board (not shared with team)
-kanban.json
+kanban.md
 
 # OS
 .DS_Store
