@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI in Business Analysis: My Journey</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/white.min.css">
+    <style>
+        :root {
+            --primary-color: #662e90;
+            --secondary-color: #662e90;
+            --accent-blue: #4da3da;
+            --accent-orange: #ed8c22;
+            --white: #ffffff;
+            --off-white: #f6f7f9;
+            --text-dark: #2d3748;
+            --text-light: #718096;
+        }
+
+        .reveal {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--white);
+        }
+
+        .reveal .slides {
+            background-color: var(--white);
+        }
+
+        .reveal h1, .reveal h2, .reveal h3 {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .reveal h1 {
+            font-size: 2.5em;
+            margin-bottom: 0.5em;
+        }
+
+        .reveal h2 {
+            font-size: 1.8em;
+            margin-bottom: 0.8em;
+        }
+
+        .reveal h3 {
+            font-size: 1.3em;
+            color: var(--secondary-color);
+        }
+
+        .reveal section {
+            text-align: left;
+        }
+
+        .reveal .title-slide {
+            text-align: center;
+        }
+
+        .reveal .center-content {
+            text-align: center;
+        }
+
+        /* Custom boxes */
+        .barrier-box {
+            background: var(--off-white);
+            border-left: 4px solid var(--accent-orange);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+
+        .success-box {
+            background: var(--off-white);
+            border-left: 4px solid var(--primary-color);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+
+        .info-box {
+            background: var(--off-white);
+            border-left: 4px solid var(--primary-color);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+
+        /* Input-output pairs */
+        .io-pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .input-box, .output-box {
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .input-box {
+            background: var(--white);
+            border: 2px solid var(--accent-blue);
+        }
+
+        .output-box {
+            background: var(--off-white);
+            border: 2px solid var(--primary-color);
+        }
+
+        .io-label {
+            font-weight: 600;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Stats and metrics */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+
+        /* List styling */
+        .reveal ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .reveal li {
+            margin: 0.8rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .reveal li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .reveal li.check::before {
+            content: "✓";
+            color: var(--primary-color);
+        }
+
+        /* Quote styling */
+        .reveal blockquote {
+            background: var(--off-white);
+            color: var(--primary-color);
+            border-left: 4px solid var(--primary-color);
+            padding: 2rem;
+            font-style: italic;
+            font-size: 1.2em;
+            margin: 2rem 0;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        /* Timeline/Process flow */
+        .process-step {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .step-number {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: var(--primary-color);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .step-content {
+            margin-left: 0;
+        }
+
+        /* Formula/equation styling */
+        .formula {
+            background: var(--off-white);
+            color: var(--primary-color);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: 600;
+            margin: 2rem auto;
+            border: 3px solid var(--primary-color);
+        }
+
+        /* Before/After comparison */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .before, .after {
+            padding: 2rem;
+            border-radius: 8px;
+        }
+
+        .before {
+            background: var(--off-white);
+            border: 2px solid var(--accent-orange);
+        }
+
+        .after {
+            background: var(--off-white);
+            border: 2px solid var(--primary-color);
+        }
+
+        .comparison-title {
+            font-weight: 700;
+            font-size: 1.3em;
+            margin-bottom: 1rem;
+            text-align: center;
+            color: var(--primary-color);
+        }
+
+        /* Section headers */
+        .section-number {
+            color: var(--primary-color);
+            font-size: 0.8em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Footer */
+        .reveal .slide-number {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 4px;
+        }
+
+        /* Small text */
+        .small-text {
+            font-size: 0.75em;
+            color: var(--text-light);
+        }
+
+        /* Highlight text */
+        .highlight {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Emoji sizing */
+        .emoji {
+            font-size: 1.2em;
+        }
+
+        /* Grid layout for lists */
+        .two-column-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Lingaro wave decoration */
+        .reveal .slides::after {
+            content: "";
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(90deg,
+                var(--accent-blue) 0%,
+                var(--accent-blue) 5%,
+                var(--accent-orange) 5%,
+                var(--accent-orange) 15%,
+                var(--primary-color) 15%,
+                var(--primary-color) 45%,
+                transparent 45%);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Logo in corner */
+        .lingaro-logo {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-weight: 700;
+            font-size: 1.2em;
+            color: var(--primary-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .lingaro-logo .o-accent {
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="lingaro-logo">lin<span class="o-accent">o</span>aro</div>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- Title Slide -->
+            <section class="title-slide">
+                <h1 style="color: var(--primary-color);">AI in Business Analysis</h1>
+                <h3>My Journey from Skeptic to Power User</h3>
+                <p style="margin-top: 3rem; color: var(--text-light);">
+                    <strong>Kyla Salamanca</strong><br>
+                    GCP Team - Data Products Delivery<br>
+                    Business Analyst
+                </p>
+                <p style="margin-top: 2rem; font-size: 0.8em; color: var(--primary-color);">
+                    <em>Achieve More With Data</em>
+                </p>
+            </section>
+
+            <!-- Agenda -->
+            <section>
+                <h2>Today's Journey</h2>
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>The Barriers</h3>
+                        <p class="small-text">Thoughts before incorporating AI</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>The Process</h3>
+                        <p class="small-text">How I kickstarted my AI workflow</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>The Results</h3>
+                        <p class="small-text">Strategic advantages and outcomes</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 1: BARRIERS -->
+            <section>
+                <section class="center-content">
+                    <p class="section-number">Section 01</p>
+                    <h1>The Barriers</h1>
+                    <p class="highlight">Thoughts Before Incorporating AI</p>
+                </section>
+
+                <section>
+                    <h2>The Initial Barriers</h2>
+                    <div class="barrier-box">
+                        <h3><span class="emoji">⏰</span> "I don't have time to learn this"</h3>
+                        <ul>
+                            <li>Already overwhelmed with deliverables</li>
+                            <li>Adding "one more thing" felt impossible</li>
+                            <li>Perception: High learning curve, low immediate value</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>The Initial Barriers</h2>
+                    <div class="barrier-box">
+                        <h3><span class="emoji">❓</span> "I don't know where to start"</h3>
+                        <ul>
+                            <li>Too many AI tools available</li>
+                            <li>Unclear which tasks AI could actually help with</li>
+                            <li>Lack of clear roadmap or framework</li>
+                            <li>No examples from other BAs in the organization</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>The Initial Barriers</h2>
+                    <div class="barrier-box">
+                        <h3><span class="emoji">😰</span> "Fear of being replaced"</h3>
+                        <ul>
+                            <li>Concern: Will AI make my role obsolete?</li>
+                            <li>Worry about losing the human touch</li>
+                            <li>Anxiety about skills becoming outdated</li>
+                            <li>Question: What value do I add if AI can do my work?</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="center-content">
+                    <blockquote>
+                        Spoiler: AI didn't replace me—<br>it amplified me
+                    </blockquote>
+                </section>
+            </section>
+
+            <!-- SECTION 2: KICKSTART PROCESS -->
+            <section>
+                <section class="center-content">
+                    <p class="section-number">Section 02</p>
+                    <h1>The Kickstart Process</h1>
+                    <p class="highlight">A Framework for Integration</p>
+                </section>
+
+                <!-- Step A -->
+                <section>
+                    <h2>Step A: Map Your Workflow</h2>
+                    <h3>Identify Automation Opportunities</h3>
+                    <div class="info-box">
+                        <strong>Start with a workflow audit:</strong>
+                        <ul>
+                            <li>Document your typical day/week</li>
+                            <li>Identify <strong>repetitive</strong> tasks</li>
+                            <li>Identify <strong>tedious</strong> tasks</li>
+                            <li>Identify <strong>documentation-heavy</strong> tasks</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>My Identified Opportunities</h2>
+                    <div class="stat-grid">
+                        <div class="stat-card">
+                            <span class="emoji">📝</span>
+                            <div class="stat-label">Meeting transcription → documentation</div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="emoji">📄</span>
+                            <div class="stat-label">BRD creation from scattered notes</div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="emoji">🔄</span>
+                            <div class="stat-label">Requirements updates after changes</div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="emoji">✅</span>
+                            <div class="stat-label">Discovery checklist generation</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Step B -->
+                <section>
+                    <h2>Step B: Define Input-Output Pairs</h2>
+                    <div class="info-box">
+                        <strong>The Framework:</strong> For each identified task, define:
+                        <ul>
+                            <li><span class="emoji">📥</span> <strong>Input:</strong> What you give the AI</li>
+                            <li><span class="emoji">📤</span> <strong>Output:</strong> What you expect back</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Example 1: Meeting Documentation</h2>
+                    <div class="io-pair">
+                        <div class="input-box">
+                            <div class="io-label"><span class="emoji">📥</span> INPUT</div>
+                            <p>Transcription of stakeholder meeting</p>
+                        </div>
+                        <div class="output-box">
+                            <div class="io-label"><span class="emoji">📤</span> OUTPUT</div>
+                            <ul style="margin: 0; font-size: 0.9em;">
+                                <li>Meeting minutes (formatted)</li>
+                                <li>Decision logs</li>
+                                <li>Action items with owners</li>
+                                <li>Updates to existing requirements</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Example 2: Discovery Phase</h2>
+                    <div class="io-pair">
+                        <div class="input-box">
+                            <div class="io-label"><span class="emoji">📥</span> INPUT</div>
+                            <p>Business Requirements Document (BRD)</p>
+                        </div>
+                        <div class="output-box">
+                            <div class="io-label"><span class="emoji">📤</span> OUTPUT</div>
+                            <ul style="margin: 0; font-size: 0.9em;">
+                                <li>Discovery checklist</li>
+                                <li>Data Ownership Documentation</li>
+                                <li>Initial data mapping template</li>
+                                <li>Stakeholder analysis</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Example 3: Iterative Refinement</h2>
+                    <div class="io-pair">
+                        <div class="input-box">
+                            <div class="io-label"><span class="emoji">📥</span> INPUT</div>
+                            <p>All outputs from previous steps + stakeholder feedback</p>
+                        </div>
+                        <div class="output-box">
+                            <div class="io-label"><span class="emoji">📤</span> OUTPUT</div>
+                            <p><strong>BRD 2.0</strong><br>(Refined and validated)</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Step C -->
+                <section>
+                    <h2>Step C: Always Validate AI Output</h2>
+                    <div class="success-box center-content">
+                        <h3>The Golden Rule: Trust but Verify</h3>
+                    </div>
+                    <blockquote style="font-size: 0.9em;">
+                        AI is a co-pilot, not an autopilot.<br>
+                        You remain accountable for all deliverables.
+                    </blockquote>
+                </section>
+
+                <section>
+                    <h2>Validation Checklist</h2>
+                    <ul>
+                        <li class="check">Does it align with actual stakeholder intent?</li>
+                        <li class="check">Are technical details accurate?</li>
+                        <li class="check">Does it follow company/project standards?</li>
+                        <li class="check">Are there any hallucinations or made-up information?</li>
+                        <li class="check">Is the tone appropriate for the audience?</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>My Validation Process</h2>
+                    <div class="process-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <strong>Spot-check:</strong> Review key sections immediately
+                        </div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <strong>Cross-reference:</strong> Compare with source materials
+                        </div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <strong>Stakeholder review:</strong> Get SME validation
+                        </div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <strong>Iterative refinement:</strong> Feed corrections back to AI
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Step D -->
+                <section>
+                    <h2>Step D: Continuously Improve Your Agent</h2>
+                    <h3 class="highlight">Refinement is an ongoing process</h3>
+                </section>
+
+                <section>
+                    <h2>Key Improvement Strategies</h2>
+                    <div class="two-column-list">
+                        <div>
+                            <h3>1. Define Clear Rules</h3>
+                            <ul style="font-size: 0.85em;">
+                                <li>Document formatting standards</li>
+                                <li>Terminology preferences</li>
+                                <li>Company-specific templates</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3>2. Be Specific</h3>
+                            <ul style="font-size: 0.85em;">
+                                <li>Avoid vague instructions</li>
+                                <li>Provide context and constraints</li>
+                                <li>Specify desired output format</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Be Specific: Example</h2>
+                    <div style="margin: 2rem 0;">
+                        <div class="barrier-box">
+                            <strong style="color: #e53e3e;">❌ Bad:</strong>
+                            <p>"Summarize this meeting"</p>
+                        </div>
+                        <div class="success-box">
+                            <strong style="color: #38a169;">✓ Good:</strong>
+                            <p>"Extract action items with owners and due dates, organize by priority, and flag any unresolved decisions"</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Build Your Knowledge Base</h2>
+                    <div class="info-box">
+                        <ul>
+                            <li>Save successful prompts</li>
+                            <li>Document what works (and what doesn't)</li>
+                            <li>Create prompt templates for recurring tasks</li>
+                            <li>Build context files (like CLAUDE.md)</li>
+                            <li>Learn from mistakes and iterate</li>
+                        </ul>
+                    </div>
+                </section>
+            </section>
+
+            <!-- SECTION 3: RESULTS -->
+            <section>
+                <section class="center-content">
+                    <p class="section-number">Section 03</p>
+                    <h1>The Results</h1>
+                    <p class="highlight">The Strategic Advantage</p>
+                </section>
+
+                <section class="center-content">
+                    <h2>The Transformation</h2>
+                    <div class="formula">
+                        More Automation = More Efficiency<br>= More Time for Strategic Thinking
+                    </div>
+                </section>
+
+                <section>
+                    <h2>What Changed: Time Allocation</h2>
+                    <div class="comparison">
+                        <div class="before">
+                            <div class="comparison-title">⏰ Before AI</div>
+                            <ul style="font-size: 0.85em;">
+                                <li><span class="stat-number" style="font-size: 1.5em;">60%</span> on documentation grunt work</li>
+                                <li><span class="stat-number" style="font-size: 1.5em;">40%</span> on strategic analysis</li>
+                                <li>End of day: tired from repetitive tasks</li>
+                                <li>Limited capacity for innovation</li>
+                            </ul>
+                        </div>
+                        <div class="after">
+                            <div class="comparison-title">✨ After AI</div>
+                            <ul style="font-size: 0.85em;">
+                                <li><span class="stat-number" style="font-size: 1.5em;">20%</span> on documentation (validation)</li>
+                                <li><span class="stat-number" style="font-size: 1.5em;">80%</span> on strategic analysis</li>
+                                <li>End of day: energy for creative problem-solving</li>
+                                <li>Capacity to explore new methodologies</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>New Capabilities Unlocked</h2>
+                    <div class="stat-grid">
+                        <div class="stat-card">
+                            <span class="emoji" style="font-size: 2em;">🔍</span>
+                            <div class="stat-label">Deeper requirements analysis</div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="emoji" style="font-size: 2em;">🤝</span>
+                            <div class="stat-label">More stakeholder engagement</div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="emoji" style="font-size: 2em;">📊</span>
+                            <div class="stat-label">Proactive data analysis</div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="emoji" style="font-size: 2em;">🎨</span>
+                            <div class="stat-label">Process improvement</div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="emoji" style="font-size: 2em;">🚀</span>
+                            <div class="stat-label">Team workflow integration</div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="emoji" style="font-size: 2em;">🏗️</span>
+                            <div class="stat-label">Building the BA Agent</div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>The Ripple Effect</h2>
+                    <div class="process-step">
+                        <div class="step-number">💼</div>
+                        <div class="step-content">
+                            <h3>Personal Impact</h3>
+                            <ul style="font-size: 0.85em;">
+                                <li>Faster turnaround on deliverables</li>
+                                <li>Higher quality, more consistent documentation</li>
+                                <li>Reduced burnout from tedious tasks</li>
+                                <li>More satisfying work (focus on what humans do best)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>The Ripple Effect</h2>
+                    <div class="process-step">
+                        <div class="step-number">👥</div>
+                        <div class="step-content">
+                            <h3>Team Impact</h3>
+                            <ul style="font-size: 0.85em;">
+                                <li>Sharing AI workflows with project teams</li>
+                                <li>Helping others identify automation opportunities</li>
+                                <li>Building reusable AI tools (like the BA Agent)</li>
+                                <li>Elevating the entire team's productivity</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>The Ripple Effect</h2>
+                    <div class="process-step">
+                        <div class="step-number">📈</div>
+                        <div class="step-content">
+                            <h3>Business Impact</h3>
+                            <ul style="font-size: 0.85em;">
+                                <li>Faster time-to-value on projects</li>
+                                <li>More thorough requirements documentation</li>
+                                <li>Better stakeholder communication</li>
+                                <li>Reduced project risk through better analysis</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- CONCLUSION -->
+            <section>
+                <section class="center-content">
+                    <h1>AI Didn't Replace Me</h1>
+                    <h2 class="highlight">It Redefined My Value</h2>
+                </section>
+
+                <section>
+                    <h2>The BA Role Evolution</h2>
+                    <div class="comparison">
+                        <div class="before">
+                            <div class="comparison-title">Traditional BA</div>
+                            <ul style="font-size: 0.85em;">
+                                <li>Documentation generator</li>
+                                <li>Information collector</li>
+                                <li>Process follower</li>
+                            </ul>
+                        </div>
+                        <div class="after">
+                            <div class="comparison-title">AI-Powered BA</div>
+                            <ul style="font-size: 0.85em;">
+                                <li>Strategic advisor</li>
+                                <li>Insight creator</li>
+                                <li>Process innovator</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="center-content">
+                    <blockquote>
+                        The question isn't<br>
+                        "Will AI replace BAs?"<br><br>
+                        It's<br>
+                        <span class="highlight">"How will BAs who use AI<br>replace those who don't?"</span>
+                    </blockquote>
+                </section>
+
+                <section>
+                    <h2>Your Turn: Call to Action</h2>
+                    <div class="process-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">Start small (pick ONE task to automate)</div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">Define your input-output pairs</div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">Validate everything</div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">Iterate and improve</div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">Share your learnings</div>
+                    </div>
+                </section>
+
+                <section class="center-content">
+                    <div class="success-box">
+                        <h3>Key Takeaway</h3>
+                        <p style="font-size: 1.2em; margin: 1rem 0;">
+                            The time "wasted" learning AI is the<br>
+                            <span class="highlight">best investment</span> I've made in my career.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Thank You -->
+                <section class="title-slide">
+                    <h1 style="color: var(--primary-color);">Thank You</h1>
+                    <h3>Questions & Discussion</h3>
+                    <p style="margin-top: 3rem; color: var(--text-light);">
+                        <strong>Kyla Salamanca</strong><br>
+                        GCP Team - Data Products Delivery<br>
+                        Business Analyst
+                    </p>
+                    <p style="margin-top: 2rem; font-size: 0.8em; color: var(--primary-color);">
+                        <em>Achieve More With Data</em>
+                    </p>
+                </section>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: true,
+            transition: 'slide',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            progress: true,
+            controls: true,
+            center: false,
+            width: 1280,
+            height: 720,
+            margin: 0.04,
+        });
+    </script>
+</body>
+</html>

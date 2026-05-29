@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI in Business Analysis - Lingaro Presentation</title>
+    <style>
+        /* === RESET & BASE === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            background: #ffffff;
+            color: #2d3748;
+        }
+
+        /* === BRAND COLORS (Lingaro Guidelines) === */
+        :root {
+            /* Main Brand Colors */
+            --brand-primary: #662e90;      /* Lingaro Purple */
+            --brand-secondary: #4da3da;    /* Accent Blue */
+            --brand-accent: #ed8c22;       /* Accent Orange */
+
+            /* Supporting Colors */
+            --bg-primary: #ffffff;         /* White dominant */
+            --bg-secondary: #f6f7f9;       /* Off-white for sections */
+            --text-primary: #2d3748;       /* Dark text */
+            --text-secondary: #718096;     /* Light text */
+
+            /* Typography */
+            --font-display: 'Segoe UI', system-ui, sans-serif;
+            --font-body: 'Segoe UI', system-ui, sans-serif;
+
+            /* Spacing (responsive) */
+            --space-xs: clamp(0.5rem, 1vw, 1rem);
+            --space-sm: clamp(1rem, 2vw, 1.5rem);
+            --space-md: clamp(1.5rem, 3vw, 2.5rem);
+            --space-lg: clamp(2rem, 4vw, 4rem);
+            --space-xl: clamp(3rem, 6vw, 6rem);
+        }
+
+        /* === VIEWPORT FITTING (Core Principle) === */
+        .slide {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: var(--space-lg);
+            position: relative;
+        }
+
+        /* === TYPOGRAPHY (Responsive with clamp) === */
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 600;
+            color: var(--brand-primary);
+            margin-bottom: var(--space-sm);
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 600;
+            color: var(--brand-primary);
+            margin-bottom: var(--space-md);
+            line-height: 1.3;
+        }
+
+        h3 {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+            line-height: 1.4;
+        }
+
+        p {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            line-height: 1.6;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+        }
+
+        /* === LOGO (Moderate Prominence) === */
+        .slide-logo {
+            position: absolute;
+            top: clamp(1rem, 2vw, 2rem);
+            right: clamp(1rem, 2vw, 2rem);
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            font-weight: 700;
+            color: var(--brand-primary);
+            z-index: 100;
+        }
+
+        .slide-logo .o-accent {
+            color: var(--brand-primary);
+        }
+
+        /* Hide logo on title and closing slides for cleaner look */
+        .slide.title-slide .slide-logo,
+        .slide.closing-slide .slide-logo {
+            display: none;
+        }
+
+        /* === SECTION NUMBER === */
+        .section-number {
+            font-size: clamp(0.75rem, 1.5vw, 0.9rem);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--brand-primary);
+            margin-bottom: var(--space-sm);
+            opacity: 0.8;
+        }
+
+        /* === CONTENT CONTAINERS === */
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: left;
+        }
+
+        .slide-content.center {
+            text-align: center;
+        }
+
+        /* === LISTS (Max 6 items per slide) === */
+        ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        li {
+            font-size: clamp(0.95rem, 2vw, 1.15rem);
+            line-height: 1.6;
+            margin-bottom: clamp(0.75rem, 1.5vw, 1rem);
+            padding-left: clamp(1.5rem, 3vw, 2rem);
+            position: relative;
+        }
+
+        li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: var(--brand-primary);
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        /* === BOXES & CARDS === */
+        .info-box {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--brand-primary);
+            padding: var(--space-md);
+            border-radius: 8px;
+            margin: var(--space-md) 0;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-md);
+            margin: var(--space-md) 0;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-sm);
+            margin: var(--space-md) 0;
+        }
+
+        .card {
+            background: white;
+            border: 2px solid var(--bg-secondary);
+            border-radius: 8px;
+            padding: var(--space-md);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: var(--brand-primary);
+        }
+
+        .card h3 {
+            color: var(--brand-primary);
+            margin-bottom: var(--space-sm);
+        }
+
+        /* === IO PAIRS === */
+        .io-pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-md);
+            margin: var(--space-md) 0;
+        }
+
+        .io-box {
+            padding: var(--space-md);
+            border-radius: 8px;
+            border: 2px solid;
+        }
+
+        .io-box.input {
+            background: white;
+            border-color: var(--brand-secondary);
+        }
+
+        .io-box.output {
+            background: var(--bg-secondary);
+            border-color: var(--brand-primary);
+        }
+
+        .io-label {
+            font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--brand-primary);
+            margin-bottom: var(--space-sm);
+        }
+
+        /* === PROCESS STEPS === */
+        .step {
+            background: white;
+            border: 2px solid var(--bg-secondary);
+            border-radius: 8px;
+            padding: var(--space-md);
+            padding-left: calc(var(--space-md) + 50px);
+            margin: var(--space-sm) 0;
+            position: relative;
+        }
+
+        .step-number {
+            position: absolute;
+            left: var(--space-md);
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--brand-primary);
+            color: white;
+            width: clamp(35px, 5vw, 45px);
+            height: clamp(35px, 5vw, 45px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: clamp(1rem, 2vw, 1.3rem);
+        }
+
+        /* === COMPARISON (Before/After) === */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-md);
+            margin: var(--space-md) 0;
+        }
+
+        .comparison-box {
+            padding: var(--space-md);
+            border-radius: 8px;
+            border: 2px solid;
+        }
+
+        .comparison-box.before {
+            background: var(--bg-secondary);
+            border-color: var(--brand-accent);
+        }
+
+        .comparison-box.after {
+            background: var(--bg-secondary);
+            border-color: var(--brand-primary);
+        }
+
+        .comparison-title {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            font-weight: 700;
+            color: var(--brand-primary);
+            margin-bottom: var(--space-sm);
+            text-align: center;
+        }
+
+        /* === QUOTE/CALLOUT === */
+        .quote {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--brand-primary);
+            padding: var(--space-lg);
+            border-radius: 8px;
+            font-style: italic;
+            font-size: clamp(1.2rem, 3vw, 1.6rem);
+            color: var(--brand-primary);
+            text-align: center;
+            margin: var(--space-md) 0;
+            max-width: 900px;
+        }
+
+        /* === FORMULA/EQUATION === */
+        .formula {
+            background: var(--bg-secondary);
+            border: 3px solid var(--brand-primary);
+            padding: var(--space-lg);
+            border-radius: 12px;
+            font-size: clamp(1.3rem, 3.5vw, 2rem);
+            font-weight: 600;
+            color: var(--brand-primary);
+            text-align: center;
+            margin: var(--space-md) auto;
+            max-width: 800px;
+        }
+
+        /* === NAVIGATION DOTS === */
+        .nav-dots {
+            position: fixed;
+            right: clamp(1rem, 2vw, 2rem);
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 1000;
+        }
+
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--brand-primary);
+            opacity: 0.3;
+            cursor: pointer;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .nav-dot.active {
+            opacity: 1;
+            transform: scale(1.3);
+        }
+
+        .nav-dot:hover {
+            opacity: 0.7;
+        }
+
+        /* === WAVE DECORATION (Subtle, Lingaro Brand) === */
+        .slide::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(90deg,
+                var(--brand-secondary) 0%,
+                var(--brand-secondary) 5%,
+                var(--brand-accent) 5%,
+                var(--brand-accent) 15%,
+                var(--brand-primary) 15%,
+                var(--brand-primary) 45%,
+                transparent 45%);
+            opacity: 0.12;
+            pointer-events: none;
+        }
+
+        /* Remove wave from title slide for cleaner look */
+        .slide.title-slide::after {
+            display: none;
+        }
+
+        /* === RESPONSIVE BREAKPOINTS === */
+        @media (max-width: 768px) {
+            .slide {
+                padding: var(--space-md);
+            }
+
+            .io-pair,
+            .comparison,
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-dots {
+                display: none;
+            }
+        }
+
+        @media (max-width: 500px) {
+            h1 {
+                font-size: clamp(1.75rem, 8vw, 2.5rem);
+            }
+        }
+
+        /* === ANIMATIONS (Scroll-based) === */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* === ACCESSIBILITY === */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+
+            html {
+                scroll-behavior: auto;
+            }
+        }
+
+        /* === KEYBOARD NAVIGATION HINT === */
+        .kb-hint {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: clamp(0.75rem, 1.5vw, 0.9rem);
+            color: var(--text-secondary);
+            opacity: 0.6;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Dots -->
+    <div class="nav-dots" id="navDots"></div>
+
+    <!-- Keyboard Hint -->
+    <div class="kb-hint">Use ↑↓ or scroll to navigate</div>
+
+    <!-- SLIDE 1: TITLE -->
+    <section class="slide title-slide">
+        <div class="slide-content center">
+            <h1 class="reveal">AI in Business Analysis</h1>
+            <h3 class="reveal" style="color: var(--text-secondary); margin-top: var(--space-md);">
+                My Journey from Skeptic to Power User
+            </h3>
+            <p style="margin-top: var(--space-xl); color: var(--text-secondary);">
+                <strong>Kyla Salamanca</strong><br>
+                GCP Team - Data Products Delivery<br>
+                Business Analyst
+            </p>
+            <p style="margin-top: var(--space-md); font-style: italic; color: var(--brand-primary);">
+                Achieve More With Data
+            </p>
+        </div>
+    </section>
+
+    <!-- SLIDE 2: AGENDA -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content">
+            <h2 class="reveal">Today's Journey</h2>
+            <div class="reveal">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>The Barriers</h3>
+                    <p style="color: var(--text-secondary); font-size: clamp(0.9rem, 1.8vw, 1rem);">
+                        Thoughts before incorporating AI
+                    </p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>The Process</h3>
+                    <p style="color: var(--text-secondary); font-size: clamp(0.9rem, 1.8vw, 1rem);">
+                        How I kickstarted my AI workflow
+                    </p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>The Results</h3>
+                    <p style="color: var(--text-secondary); font-size: clamp(0.9rem, 1.8vw, 1rem);">
+                        Strategic advantages and outcomes
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 3: SECTION 1 INTRO -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content center">
+            <p class="section-number reveal">Section 01</p>
+            <h1 class="reveal">The Barriers</h1>
+            <p class="reveal" style="font-size: clamp(1.1rem, 2.5vw, 1.4rem); color: var(--brand-primary); font-weight: 600;">
+                Thoughts Before Incorporating AI
+            </p>
+        </div>
+    </section>
+
+    <!-- SLIDE 4: BARRIER 1 - NO TIME -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content">
+            <h2 class="reveal">The Initial Barriers</h2>
+            <div class="info-box reveal">
+                <h3 style="color: var(--brand-primary);">⏰ "I don't have time to learn this"</h3>
+                <ul>
+                    <li>Already overwhelmed with deliverables</li>
+                    <li>Adding "one more thing" felt impossible</li>
+                    <li>Perception: High learning curve, low immediate value</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 5: BARRIER 2 - WHERE TO START -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content">
+            <h2 class="reveal">The Initial Barriers</h2>
+            <div class="info-box reveal">
+                <h3 style="color: var(--brand-primary);">❓ "I don't know where to start"</h3>
+                <ul>
+                    <li>Too many AI tools available</li>
+                    <li>Unclear which tasks AI could actually help with</li>
+                    <li>Lack of clear roadmap or framework</li>
+                    <li>No examples from other BAs in the organization</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 6: BARRIER 3 - FEAR -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content">
+            <h2 class="reveal">The Initial Barriers</h2>
+            <div class="info-box reveal">
+                <h3 style="color: var(--brand-primary);">😰 "Fear of being replaced"</h3>
+                <ul>
+                    <li>Concern: Will AI make my role obsolete?</li>
+                    <li>Worry about losing the human touch</li>
+                    <li>Anxiety about skills becoming outdated</li>
+                    <li>Question: What value do I add if AI can do my work?</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 7: SPOILER -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content center">
+            <div class="quote reveal">
+                Spoiler: AI didn't replace me—<br>it amplified me
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 8: SECTION 2 INTRO -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content center">
+            <p class="section-number reveal">Section 02</p>
+            <h1 class="reveal">The Kickstart Process</h1>
+            <p class="reveal" style="font-size: clamp(1.1rem, 2.5vw, 1.4rem); color: var(--brand-primary); font-weight: 600;">
+                A Framework for Integration
+            </p>
+        </div>
+    </section>
+
+    <!-- SLIDE 9: STEP A -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content">
+            <h2 class="reveal">Step A: Map Your Workflow</h2>
+            <h3 class="reveal">Identify Automation Opportunities</h3>
+            <div class="info-box reveal">
+                <strong>Start with a workflow audit:</strong>
+                <ul style="margin-top: var(--space-sm);">
+                    <li>Document your typical day/week</li>
+                    <li>Identify <strong>repetitive</strong> tasks</li>
+                    <li>Identify <strong>tedious</strong> tasks</li>
+                    <li>Identify <strong>documentation-heavy</strong> tasks</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 10: MY OPPORTUNITIES -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content">
+            <h2 class="reveal">My Identified Opportunities</h2>
+            <div class="grid-2 reveal">
+                <div class="card">
+                    <h3>📝</h3>
+                    <p>Meeting transcription → documentation</p>
+                </div>
+                <div class="card">
+                    <h3>📄</h3>
+                    <p>BRD creation from scattered notes</p>
+                </div>
+                <div class="card">
+                    <h3>🔄</h3>
+                    <p>Requirements updates after changes</p>
+                </div>
+                <div class="card">
+                    <h3>✅</h3>
+                    <p>Discovery checklist generation</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 11: STEP B INTRO -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content">
+            <h2 class="reveal">Step B: Define Input-Output Pairs</h2>
+            <div class="info-box reveal">
+                <strong>The Framework:</strong> For each identified task, define:
+                <ul style="margin-top: var(--space-sm);">
+                    <li>📥 <strong>Input:</strong> What you give the AI</li>
+                    <li>📤 <strong>Output:</strong> What you expect back</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 12: EXAMPLE 1 -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content">
+            <h2 class="reveal">Example 1: Meeting Documentation</h2>
+            <div class="io-pair reveal">
+                <div class="io-box input">
+                    <div class="io-label">📥 INPUT</div>
+                    <p>Transcription of stakeholder meeting</p>
+                </div>
+                <div class="io-box output">
+                    <div class="io-label">📤 OUTPUT</div>
+                    <ul style="font-size: clamp(0.85rem, 1.8vw, 1rem);">
+                        <li>Meeting minutes (formatted)</li>
+                        <li>Decision logs</li>
+                        <li>Action items with owners</li>
+                        <li>Updates to existing requirements</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 13: EXAMPLE 2 -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content">
+            <h2 class="reveal">Example 2: Discovery Phase</h2>
+            <div class="io-pair reveal">
+                <div class="io-box input">
+                    <div class="io-label">📥 INPUT</div>
+                    <p>Business Requirements Document (BRD)</p>
+                </div>
+                <div class="io-box output">
+                    <div class="io-label">📤 OUTPUT</div>
+                    <ul style="font-size: clamp(0.85rem, 1.8vw, 1rem);">
+                        <li>Discovery checklist</li>
+                        <li>Data Ownership Documentation</li>
+                        <li>Initial data mapping template</li>
+                        <li>Stakeholder analysis</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 14: EXAMPLE 3 -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content">
+            <h2 class="reveal">Example 3: Iterative Refinement</h2>
+            <div class="io-pair reveal">
+                <div class="io-box input">
+                    <div class="io-label">📥 INPUT</div>
+                    <p>All outputs from previous steps + stakeholder feedback</p>
+                </div>
+                <div class="io-box output">
+                    <div class="io-label">📤 OUTPUT</div>
+                    <p><strong>BRD 2.0</strong><br>(Refined and validated)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 15: STEP C -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content">
+            <h2 class="reveal">Step C: Always Validate AI Output</h2>
+            <div class="info-box reveal" style="text-align: center;">
+                <h3 style="color: var(--brand-primary);">The Golden Rule: Trust but Verify</h3>
+            </div>
+            <div class="quote reveal" style="font-size: clamp(1rem, 2.5vw, 1.2rem);">
+                AI is a co-pilot, not an autopilot.<br>
+                You remain accountable for all deliverables.
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 16: VALIDATION CHECKLIST -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content">
+            <h2 class="reveal">Validation Checklist</h2>
+            <div class="reveal">
+                <ul>
+                    <li>Does it align with actual stakeholder intent?</li>
+                    <li>Are technical details accurate?</li>
+                    <li>Does it follow company/project standards?</li>
+                    <li>Are there any hallucinations or made-up information?</li>
+                    <li>Is the tone appropriate for the audience?</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 17: STEP D -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content">
+            <h2 class="reveal">Step D: Continuously Improve Your Agent</h2>
+            <h3 class="reveal" style="color: var(--brand-primary);">Refinement is an ongoing process</h3>
+            <div class="info-box reveal">
+                <ul>
+                    <li><strong>Define clear rules</strong> - Document formatting standards and terminology</li>
+                    <li><strong>Be specific</strong> - Avoid vague instructions, provide context</li>
+                    <li><strong>Build knowledge base</strong> - Save successful prompts and templates</li>
+                    <li><strong>Learn from mistakes</strong> - Analyze failures and refine</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 18: BE SPECIFIC EXAMPLE -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content">
+            <h2 class="reveal">Be Specific: Example</h2>
+            <div class="reveal">
+                <div class="info-box" style="border-left-color: var(--brand-accent); background: #fff5f5;">
+                    <strong style="color: #c53030;">❌ Bad:</strong>
+                    <p style="margin-top: var(--space-sm);">"Summarize this meeting"</p>
+                </div>
+                <div class="info-box" style="border-left-color: var(--brand-primary); background: var(--bg-secondary); margin-top: var(--space-md);">
+                    <strong style="color: var(--brand-primary);">✓ Good:</strong>
+                    <p style="margin-top: var(--space-sm);">"Extract action items with owners and due dates, organize by priority, and flag any unresolved decisions"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 19: SECTION 3 INTRO -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content center">
+            <p class="section-number reveal">Section 03</p>
+            <h1 class="reveal">The Results</h1>
+            <p class="reveal" style="font-size: clamp(1.1rem, 2.5vw, 1.4rem); color: var(--brand-primary); font-weight: 600;">
+                The Strategic Advantage
+            </p>
+        </div>
+    </section>
+
+    <!-- SLIDE 20: FORMULA -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content center">
+            <h2 class="reveal">The Transformation</h2>
+            <div class="formula reveal">
+                More Automation = More Efficiency<br>= More Time for Strategic Thinking
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 21: BEFORE/AFTER -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content">
+            <h2 class="reveal">What Changed: Time Allocation</h2>
+            <div class="comparison reveal">
+                <div class="comparison-box before">
+                    <div class="comparison-title">⏰ Before AI</div>
+                    <ul style="font-size: clamp(0.85rem, 1.8vw, 1rem);">
+                        <li><strong style="font-size: 1.5em; color: var(--brand-accent);">60%</strong> on documentation</li>
+                        <li><strong style="font-size: 1.5em; color: var(--brand-accent);">40%</strong> on strategy</li>
+                        <li>Tired from repetitive tasks</li>
+                        <li>Limited innovation capacity</li>
+                    </ul>
+                </div>
+                <div class="comparison-box after">
+                    <div class="comparison-title">✨ After AI</div>
+                    <ul style="font-size: clamp(0.85rem, 1.8vw, 1rem);">
+                        <li><strong style="font-size: 1.5em; color: var(--brand-primary);">20%</strong> on documentation</li>
+                        <li><strong style="font-size: 1.5em; color: var(--brand-primary);">80%</strong> on strategy</li>
+                        <li>Energy for problem-solving</li>
+                        <li>Exploring new methodologies</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 22: NEW CAPABILITIES -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content">
+            <h2 class="reveal">New Capabilities Unlocked</h2>
+            <div class="grid-3 reveal">
+                <div class="card">
+                    <h3 style="font-size: 2em; text-align: center;">🔍</h3>
+                    <p style="text-align: center; font-size: clamp(0.85rem, 1.8vw, 0.95rem);">Deeper requirements analysis</p>
+                </div>
+                <div class="card">
+                    <h3 style="font-size: 2em; text-align: center;">🤝</h3>
+                    <p style="text-align: center; font-size: clamp(0.85rem, 1.8vw, 0.95rem);">More stakeholder engagement</p>
+                </div>
+                <div class="card">
+                    <h3 style="font-size: 2em; text-align: center;">📊</h3>
+                    <p style="text-align: center; font-size: clamp(0.85rem, 1.8vw, 0.95rem);">Proactive data analysis</p>
+                </div>
+                <div class="card">
+                    <h3 style="font-size: 2em; text-align: center;">🎨</h3>
+                    <p style="text-align: center; font-size: clamp(0.85rem, 1.8vw, 0.95rem);">Process improvement</p>
+                </div>
+                <div class="card">
+                    <h3 style="font-size: 2em; text-align: center;">🚀</h3>
+                    <p style="text-align: center; font-size: clamp(0.85rem, 1.8vw, 0.95rem);">Team workflow integration</p>
+                </div>
+                <div class="card">
+                    <h3 style="font-size: 2em; text-align: center;">🏗️</h3>
+                    <p style="text-align: center; font-size: clamp(0.85rem, 1.8vw, 0.95rem);">Building the BA Agent</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 23: RIPPLE EFFECT -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content">
+            <h2 class="reveal">The Ripple Effect</h2>
+            <div class="grid-2 reveal">
+                <div class="info-box" style="border-left-color: var(--brand-primary);">
+                    <h3 style="color: var(--brand-primary);">💼 Personal Impact</h3>
+                    <ul style="font-size: clamp(0.85rem, 1.8vw, 1rem);">
+                        <li>Faster turnaround on deliverables</li>
+                        <li>Higher quality documentation</li>
+                        <li>Reduced burnout</li>
+                        <li>More satisfying work</li>
+                    </ul>
+                </div>
+                <div class="info-box" style="border-left-color: var(--brand-secondary);">
+                    <h3 style="color: var(--brand-primary);">👥 Team Impact</h3>
+                    <ul style="font-size: clamp(0.85rem, 1.8vw, 1rem);">
+                        <li>Sharing AI workflows</li>
+                        <li>Helping identify opportunities</li>
+                        <li>Building reusable tools</li>
+                        <li>Elevating team productivity</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 24: BUSINESS IMPACT -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content">
+            <h2 class="reveal">Business Impact</h2>
+            <div class="info-box reveal" style="border-left-color: var(--brand-accent);">
+                <ul>
+                    <li>Faster time-to-value on projects</li>
+                    <li>More thorough requirements documentation</li>
+                    <li>Better stakeholder communication</li>
+                    <li>Reduced project risk through better analysis</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 25: BA EVOLUTION -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content">
+            <h2 class="reveal">The BA Role Evolution</h2>
+            <div class="comparison reveal">
+                <div class="comparison-box before">
+                    <div class="comparison-title">Traditional BA</div>
+                    <ul style="font-size: clamp(0.9rem, 1.8vw, 1rem);">
+                        <li>Documentation generator</li>
+                        <li>Information collector</li>
+                        <li>Process follower</li>
+                    </ul>
+                </div>
+                <div class="comparison-box after">
+                    <div class="comparison-title">AI-Powered BA</div>
+                    <ul style="font-size: clamp(0.9rem, 1.8vw, 1rem);">
+                        <li>Strategic advisor</li>
+                        <li>Insight creator</li>
+                        <li>Process innovator</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 26: KEY QUESTION -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content center">
+            <div class="quote reveal">
+                The question isn't<br>
+                "Will AI replace BAs?"<br><br>
+                It's<br>
+                <strong style="color: var(--brand-primary);">"How will BAs who use AI<br>replace those who don't?"</strong>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 27: CALL TO ACTION -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content">
+            <h2 class="reveal">Your Turn: Call to Action</h2>
+            <div class="reveal">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <p>Start small (pick ONE task to automate)</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <p>Define your input-output pairs</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <p>Validate everything</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <p>Iterate and improve</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <p>Share your learnings</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 28: KEY TAKEAWAY -->
+    <section class="slide">
+        <div class="slide-logo">lin<span class="o-accent">o</span>aro</div>
+        <div class="slide-content center">
+            <div class="info-box reveal" style="max-width: 900px; margin: 0 auto;">
+                <h3 style="color: var(--brand-primary); text-align: center;">Key Takeaway</h3>
+                <p style="font-size: clamp(1.1rem, 2.5vw, 1.3rem); margin-top: var(--space-md); text-align: center;">
+                    The time "wasted" learning AI is the<br>
+                    <strong style="color: var(--brand-primary);">best investment</strong> I've made in my career.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 29: THANK YOU -->
+    <section class="slide closing-slide">
+        <div class="slide-content center">
+            <h1 class="reveal" style="color: var(--brand-primary);">Thank You</h1>
+            <h3 class="reveal" style="color: var(--text-secondary); margin-top: var(--space-md);">
+                Questions & Discussion
+            </h3>
+            <p style="margin-top: var(--space-xl); color: var(--text-secondary);">
+                <strong>Kyla Salamanca</strong><br>
+                GCP Team - Data Products Delivery<br>
+                Business Analyst
+            </p>
+            <p style="margin-top: var(--space-md); font-style: italic; color: var(--brand-primary);">
+                Achieve More With Data
+            </p>
+        </div>
+    </section>
+
+    <!-- JavaScript for Navigation and Animations -->
+    <script>
+        // === NAVIGATION DOTS ===
+        const slides = document.querySelectorAll('.slide');
+        const navDots = document.getElementById('navDots');
+
+        // Create dots
+        slides.forEach((slide, index) => {
+            const dot = document.createElement('div');
+            dot.className = 'nav-dot';
+            dot.addEventListener('click', () => {
+                slide.scrollIntoView({ behavior: 'smooth' });
+            });
+            navDots.appendChild(dot);
+        });
+
+        // Update active dot on scroll
+        const updateActiveDot = () => {
+            const dots = document.querySelectorAll('.nav-dot');
+            const scrollPosition = window.scrollY + window.innerHeight / 2;
+
+            slides.forEach((slide, index) => {
+                const slideTop = slide.offsetTop;
+                const slideBottom = slideTop + slide.offsetHeight;
+
+                if (scrollPosition >= slideTop && scrollPosition < slideBottom) {
+                    dots.forEach(d => d.classList.remove('active'));
+                    dots[index].classList.add('active');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', updateActiveDot);
+        updateActiveDot();
+
+        // === KEYBOARD NAVIGATION ===
+        window.addEventListener('keydown', (e) => {
+            const currentSlide = Array.from(slides).find(slide => {
+                const rect = slide.getBoundingClientRect();
+                return rect.top >= -100 && rect.top <= 100;
+            });
+
+            if (!currentSlide) return;
+            const currentIndex = Array.from(slides).indexOf(currentSlide);
+
+            if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+                e.preventDefault();
+                if (currentIndex < slides.length - 1) {
+                    slides[currentIndex + 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                e.preventDefault();
+                if (currentIndex > 0) {
+                    slides[currentIndex - 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                slides[0].scrollIntoView({ behavior: 'smooth' });
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                slides[slides.length - 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+        // === SCROLL-BASED ANIMATIONS ===
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // Initial reveal for first slide
+        setTimeout(() => {
+            document.querySelectorAll('.slide:first-child .reveal').forEach(el => {
+                el.classList.add('visible');
+            });
+        }, 100);
+    </script>
+
+</body>
+</html>

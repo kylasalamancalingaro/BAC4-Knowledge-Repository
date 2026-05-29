@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Code Extension Setup Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #34495e;
+            font-size: 1.8em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-top: 10px;
+        }
+
+        h3 {
+            color: #555;
+            font-size: 1.3em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: #444;
+        }
+
+        .intro {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin-bottom: 30px;
+            border-radius: 4px;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: #444;
+        }
+
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+            color: #c7254e;
+        }
+
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+        }
+
+        pre code {
+            background-color: transparent;
+            color: #abb2bf;
+            padding: 0;
+        }
+
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .warning strong {
+            color: #856404;
+        }
+
+        .info-box {
+            background-color: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .success-box {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .troubleshooting {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+        }
+
+        .troubleshooting h4 {
+            color: #495057;
+            margin-bottom: 10px;
+        }
+
+        strong {
+            color: #2c3e50;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .step-number {
+            background-color: #3498db;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .security-section {
+            background-color: #fff5f5;
+            border-left: 4px solid #dc3545;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .model-list {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Claude Code Extension Setup Guide</h1>
+
+        <div class="intro">
+            <p>This guide walks you through setting up the Claude Code Extension in VS Code from scratch, configured for use with Lingaro's LLM Gateway.</p>
+        </div>
+
+        <h2>Prerequisites</h2>
+        <ul>
+            <li><strong>VS Code</strong>: Download and install from <a href="https://code.visualstudio.com/" target="_blank">https://code.visualstudio.com/</a></li>
+            <li><strong>Lingaro API Key</strong>: Obtain your personal API key token from your Lingaro Dev Env Agent</li>
+        </ul>
+
+        <h2>Step 1: Install VS Code</h2>
+        <ol>
+            <li>Download VS Code from the official website</li>
+            <li>Run the installer and follow the installation wizard</li>
+            <li>Launch VS Code after installation completes</li>
+        </ol>
+
+        <h2>Step 2: Install Claude Code Extension</h2>
+        <ol>
+            <li>Open VS Code</li>
+            <li>Click on the <strong>Extensions</strong> icon in the left sidebar (or press <code>Ctrl+Shift+X</code>)</li>
+            <li>Search for <strong>"Claude Code"</strong> in the extensions marketplace</li>
+            <li>Click <strong>Install</strong> on the official Claude Code extension by Anthropic</li>
+            <li>Wait for the installation to complete</li>
+            <li>Restart VS Code if prompted</li>
+        </ol>
+
+        <h2>Step 3: Configure Environment Variables</h2>
+        <p>Before using the Claude Code Extension, you need to set up three environment variables to connect to Lingaro's LLM Gateway.</p>
+
+        <h3>Windows Setup</h3>
+        <ol>
+            <li>Open <strong>PowerShell</strong> or <strong>Command Prompt</strong> as Administrator</li>
+            <li>Run the following commands one by one:</li>
+        </ol>
+
+        <pre><code>setx ANTHROPIC_BASE_URL "https://llm.lingarogroup.com"
+setx ANTHROPIC_AUTH_TOKEN "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxx"
+setx ANTHROPIC_MODEL "claude-sonnet-4-5"</code></pre>
+
+        <div class="warning">
+            <strong>Important:</strong> Replace <code>sk-xxxxxxxxxxxxxxxxxxxxxxxxxxx</code> with your personal Lingaro API Key Token
+        </div>
+
+        <ol start="3">
+            <li>You should see "SUCCESS: Specified value was saved." for each command</li>
+            <li><strong>Close all VS Code windows</strong> and restart VS Code to apply the environment variables</li>
+        </ol>
+
+        <h3>Verify Environment Variables</h3>
+        <p>To verify the environment variables were set correctly:</p>
+        <ol>
+            <li>Open a new PowerShell window</li>
+            <li>Run:</li>
+        </ol>
+        <pre><code>echo $env:ANTHROPIC_BASE_URL
+echo $env:ANTHROPIC_AUTH_TOKEN
+echo $env:ANTHROPIC_MODEL</code></pre>
+        <p>You should see your configured values displayed.</p>
+
+        <h2>Step 4: First-Time Extension Configuration</h2>
+        <ol>
+            <li>After restarting VS Code, the Claude Code extension should automatically detect your environment variables</li>
+            <li>Open the Command Palette (<code>Ctrl+Shift+P</code>)</li>
+            <li>Type <strong>"Claude Code"</strong> to see available commands</li>
+            <li>You can also access Claude Code from:
+                <ul>
+                    <li>The Claude icon in the Activity Bar (left sidebar)</li>
+                    <li>Right-click in any file and select "Claude Code" options</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2>Step 5: Verify Setup</h2>
+        <p>Test that everything is working correctly:</p>
+        <ol>
+            <li>Open the Claude Code panel (click the Claude icon in the left sidebar)</li>
+            <li>Try a simple query like: "Hello, can you verify this is working?"</li>
+            <li>If you see a response from Claude, your setup is complete!</li>
+        </ol>
+
+        <div class="success-box">
+            <strong>Success!</strong> If you received a response, your Claude Code Extension is now properly configured and ready to use.
+        </div>
+
+        <h2>Troubleshooting</h2>
+
+        <div class="troubleshooting">
+            <h4>Extension Not Connecting</h4>
+            <p><strong>Issue:</strong> Claude Code cannot connect to the service</p>
+            <p><strong>Solutions:</strong></p>
+            <ul>
+                <li>Verify environment variables are set correctly (see Step 3)</li>
+                <li>Ensure you've restarted VS Code after setting environment variables</li>
+                <li>Check that your <code>ANTHROPIC_AUTH_TOKEN</code> is valid and not expired</li>
+                <li>Verify you have network access to <code>https://llm.lingarogroup.com</code></li>
+            </ul>
+        </div>
+
+        <div class="troubleshooting">
+            <h4>Environment Variables Not Recognized</h4>
+            <p><strong>Issue:</strong> VS Code doesn't detect the environment variables</p>
+            <p><strong>Solutions:</strong></p>
+            <ul>
+                <li>Close <strong>all</strong> VS Code windows completely</li>
+                <li>Reopen VS Code (environment variables are loaded on startup)</li>
+                <li>On Windows, system environment variables require a full application restart</li>
+            </ul>
+        </div>
+
+        <div class="troubleshooting">
+            <h4>Authentication Errors</h4>
+            <p><strong>Issue:</strong> Receiving authentication or permission errors</p>
+            <p><strong>Solutions:</strong></p>
+            <ul>
+                <li>Verify your <code>ANTHROPIC_AUTH_TOKEN</code> is correct</li>
+                <li>Contact your Lingaro administrator to confirm your API key is active</li>
+                <li>Check that you're using the correct token format (should start with <code>sk-</code>)</li>
+            </ul>
+        </div>
+
+        <h2>Additional Configuration</h2>
+
+        <h3>Model Selection</h3>
+        <p>The default model is set via the <code>ANTHROPIC_MODEL</code> environment variable to <code>claude-sonnet-4-5</code>. You can change this by:</p>
+        <ol>
+            <li>Opening PowerShell as Administrator</li>
+            <li>Running:</li>
+        </ol>
+        <pre><code>setx ANTHROPIC_MODEL "claude-opus-4-7"</code></pre>
+        <ol start="3">
+            <li>Restarting VS Code</li>
+        </ol>
+
+        <div class="model-list">
+            <strong>Available models:</strong>
+            <ul>
+                <li><code>claude-sonnet-4-5</code> (balanced - default)</li>
+                <li><code>claude-sonnet-4-6</code> (more capable)</li>
+                <li><code>claude-opus-4-7</code> (most capable)</li>
+                <li><code>claude-haiku-4-5-20251001</code> (fastest)</li>
+            </ul>
+        </div>
+
+        <h3>Extension Settings</h3>
+        <p>Access Claude Code settings:</p>
+        <ol>
+            <li>Open Settings (<code>Ctrl+,</code>)</li>
+            <li>Search for "Claude Code"</li>
+            <li>Configure preferences such as:
+                <ul>
+                    <li>Permission modes</li>
+                    <li>Auto-save behavior</li>
+                    <li>UI preferences</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2>Getting Help</h2>
+        <ul>
+            <li><strong>VS Code Command Palette:</strong> Press <code>Ctrl+Shift+P</code> and type <code>/help</code></li>
+            <li><strong>Claude Code Documentation:</strong> <a href="https://github.com/anthropics/claude-code" target="_blank">https://github.com/anthropics/claude-code</a></li>
+            <li><strong>Internal Support:</strong> Contact your team lead or Lingaro IT support</li>
+        </ul>
+
+        <div class="security-section">
+            <h2>⚠️ Security Notes</h2>
+            <p><strong>Important Security Reminders:</strong></p>
+            <ul>
+                <li>Never share your <code>ANTHROPIC_AUTH_TOKEN</code> with anyone</li>
+                <li>Do not commit your API token to version control</li>
+                <li>Environment variables are specific to your user account on your machine</li>
+                <li>If you suspect your token is compromised, contact your administrator immediately to rotate it</li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            <p><strong>Document Version:</strong> 1.0<br>
+            <strong>Last Updated:</strong> 2026-05-19<br>
+            <strong>Maintained By:</strong> GCP Team</p>
+        </div>
+    </div>
+</body>
+</html>

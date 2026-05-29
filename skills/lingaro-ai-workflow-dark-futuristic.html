@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI in Business Analysis - Lingaro Futuristic</title>
+    <style>
+        /* === RESET & BASE === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            overflow-x: hidden;
+            background: #000000;
+            color: #ffffff;
+        }
+
+        /* === DARK FUTURISTIC AI THEME === */
+        :root {
+            /* Dark Background Layers */
+            --bg-deep: #0a0a0f;
+            --bg-primary: #12121a;
+            --bg-secondary: #1a1a28;
+            --bg-elevated: #242438;
+
+            /* Neon/Cyber Colors */
+            --neon-purple: #a855f7;
+            --neon-cyan: #06b6d4;
+            --neon-pink: #ec4899;
+            --neon-blue: #3b82f6;
+            --neon-green: #10b981;
+
+            /* Brand Colors (AI-enhanced) */
+            --brand-primary: #9333ea;      /* Deep purple */
+            --brand-glow: #c084fc;         /* Light purple glow */
+            --brand-accent: #06b6d4;       /* Cyan */
+            --brand-accent2: #f59e0b;      /* Amber */
+
+            /* Text */
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+
+            /* Effects */
+            --glow-primary: 0 0 20px rgba(147, 51, 234, 0.5), 0 0 40px rgba(147, 51, 234, 0.3);
+            --glow-cyan: 0 0 20px rgba(6, 182, 212, 0.5), 0 0 40px rgba(6, 182, 212, 0.3);
+            --glow-pink: 0 0 20px rgba(236, 72, 153, 0.5), 0 0 40px rgba(236, 72, 153, 0.3);
+
+            /* Responsive Spacing */
+            --space-xs: clamp(0.5rem, 1vw, 1rem);
+            --space-sm: clamp(1rem, 2vw, 1.5rem);
+            --space-md: clamp(1.5rem, 3vw, 2.5rem);
+            --space-lg: clamp(2rem, 4vw, 4rem);
+            --space-xl: clamp(3rem, 6vw, 6rem);
+        }
+
+        /* === VIEWPORT FITTING === */
+        .slide {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: var(--space-lg);
+            position: relative;
+            background: radial-gradient(ellipse at top, rgba(147, 51, 234, 0.05) 0%, transparent 50%),
+                        radial-gradient(ellipse at bottom, rgba(6, 182, 212, 0.05) 0%, transparent 50%),
+                        var(--bg-deep);
+        }
+
+        /* === ANIMATED BACKGROUND PARTICLES === */
+        .slide::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(147, 51, 234, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(236, 72, 153, 0.08) 0%, transparent 50%);
+            animation: particleFloat 20s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes particleFloat {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(20px, -20px) scale(1.1); }
+        }
+
+        /* === NEURAL NETWORK GRID === */
+        .slide::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image:
+                linear-gradient(rgba(147, 51, 234, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(147, 51, 234, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        /* === TYPOGRAPHY === */
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--neon-purple) 0%, var(--neon-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: var(--space-sm);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            text-shadow: var(--glow-primary);
+            position: relative;
+        }
+
+        h2 {
+            font-size: clamp(1.8rem, 4.5vw, 3rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--brand-glow) 0%, var(--neon-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: var(--space-md);
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-size: clamp(1.3rem, 3vw, 2rem);
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+            line-height: 1.3;
+        }
+
+        p {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-sm);
+        }
+
+        /* === LINGARO LOGO === */
+        .slide-logo {
+            position: absolute;
+            top: clamp(1.5rem, 3vw, 2.5rem);
+            right: clamp(1.5rem, 3vw, 2.5rem);
+            height: clamp(30px, 4vw, 50px);
+            width: auto;
+            z-index: 100;
+            filter: brightness(0) invert(1);
+            opacity: 0.9;
+            transition: all 0.3s ease;
+        }
+
+        .slide-logo:hover {
+            opacity: 1;
+            filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(147, 51, 234, 0.8));
+        }
+
+        /* Hide logo on title slide */
+        .slide.title-slide .slide-logo {
+            display: none;
+        }
+
+        /* === CONTENT CONTAINERS === */
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: left;
+            position: relative;
+            z-index: 10;
+        }
+
+        .slide-content.center {
+            text-align: center;
+        }
+
+        /* === SECTION NUMBER === */
+        .section-number {
+            font-size: clamp(0.75rem, 1.5vw, 0.9rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--neon-cyan);
+            margin-bottom: var(--space-sm);
+            opacity: 0.9;
+            text-shadow: var(--glow-cyan);
+        }
+
+        /* === GLASS MORPHISM BOXES === */
+        .glass-box {
+            background: rgba(26, 26, 40, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(147, 51, 234, 0.2);
+            border-radius: 16px;
+            padding: var(--space-md);
+            box-shadow:
+                0 8px 32px 0 rgba(0, 0, 0, 0.37),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .glass-box:hover {
+            border-color: rgba(147, 51, 234, 0.5);
+            box-shadow:
+                0 8px 32px 0 rgba(147, 51, 234, 0.2),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .info-box {
+            background: rgba(26, 26, 40, 0.6);
+            backdrop-filter: blur(20px);
+            border-left: 3px solid var(--neon-purple);
+            border-radius: 12px;
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            box-shadow:
+                0 8px 32px 0 rgba(0, 0, 0, 0.37),
+                0 0 20px rgba(147, 51, 234, 0.1);
+        }
+
+        /* === NEON CARDS === */
+        .card {
+            background: rgba(18, 18, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            border-radius: 16px;
+            padding: var(--space-md);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                var(--neon-purple) 50%,
+                transparent 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: var(--neon-purple);
+            box-shadow:
+                0 20px 40px rgba(147, 51, 234, 0.3),
+                0 0 30px rgba(147, 51, 234, 0.2);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card h3 {
+            background: linear-gradient(135deg, var(--neon-purple) 0%, var(--neon-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === LISTS === */
+        ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        li {
+            font-size: clamp(0.95rem, 2vw, 1.15rem);
+            line-height: 1.7;
+            margin-bottom: clamp(0.75rem, 1.5vw, 1rem);
+            padding-left: clamp(1.5rem, 3vw, 2rem);
+            position: relative;
+            color: var(--text-secondary);
+        }
+
+        li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: var(--neon-cyan);
+            font-weight: bold;
+            font-size: 1.2em;
+            text-shadow: var(--glow-cyan);
+        }
+
+        /* === GRIDS === */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-md);
+            margin: var(--space-md) 0;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: var(--space-sm);
+            margin: var(--space-md) 0;
+        }
+
+        /* === IO PAIRS (Cyber Style) === */
+        .io-pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-md);
+            margin: var(--space-md) 0;
+        }
+
+        .io-box {
+            background: rgba(18, 18, 26, 0.8);
+            backdrop-filter: blur(10px);
+            padding: var(--space-md);
+            border-radius: 12px;
+            border: 2px solid;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .io-box::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(147, 51, 234, 0.1) 50%,
+                transparent 100%);
+            animation: scanLine 3s linear infinite;
+        }
+
+        @keyframes scanLine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .io-box.input {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+        }
+
+        .io-box.output {
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 20px rgba(147, 51, 234, 0.2);
+        }
+
+        .io-label {
+            font-size: clamp(0.8rem, 1.5vw, 1rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: var(--space-sm);
+            color: var(--neon-cyan);
+            text-shadow: var(--glow-cyan);
+        }
+
+        .io-box.output .io-label {
+            color: var(--neon-purple);
+            text-shadow: var(--glow-primary);
+        }
+
+        /* === PROCESS STEPS (Futuristic) === */
+        .step {
+            background: rgba(18, 18, 26, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            border-radius: 12px;
+            padding: var(--space-md);
+            padding-left: calc(var(--space-md) + 60px);
+            margin: var(--space-sm) 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .step:hover {
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 30px rgba(147, 51, 234, 0.2);
+        }
+
+        .step-number {
+            position: absolute;
+            left: var(--space-md);
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, var(--neon-purple) 0%, var(--neon-cyan) 100%);
+            color: white;
+            width: clamp(40px, 5vw, 50px);
+            height: clamp(40px, 5vw, 50px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            box-shadow: var(--glow-primary);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* === COMPARISON === */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-md);
+            margin: var(--space-md) 0;
+        }
+
+        .comparison-box {
+            background: rgba(18, 18, 26, 0.6);
+            backdrop-filter: blur(10px);
+            padding: var(--space-md);
+            border-radius: 12px;
+            border: 2px solid;
+        }
+
+        .comparison-box.before {
+            border-color: var(--brand-accent2);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+        }
+
+        .comparison-box.after {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+        }
+
+        .comparison-title {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            font-weight: 700;
+            margin-bottom: var(--space-sm);
+            text-align: center;
+            background: linear-gradient(135deg, var(--neon-purple) 0%, var(--neon-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === QUOTE (Holographic) === */
+        .quote {
+            background: rgba(26, 26, 40, 0.6);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(147, 51, 234, 0.3);
+            padding: var(--space-lg);
+            border-radius: 16px;
+            font-style: italic;
+            font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+            background: linear-gradient(135deg, var(--neon-purple) 0%, var(--neon-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin: var(--space-md) 0;
+            max-width: 900px;
+            position: relative;
+            box-shadow:
+                0 8px 32px 0 rgba(147, 51, 234, 0.3),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+        }
+
+        /* === FORMULA (AI Data Flow) === */
+        .formula {
+            background: rgba(18, 18, 26, 0.8);
+            backdrop-filter: blur(20px);
+            border: 3px solid;
+            border-image: linear-gradient(135deg, var(--neon-purple), var(--neon-cyan)) 1;
+            padding: var(--space-lg);
+            border-radius: 16px;
+            font-size: clamp(1.4rem, 4vw, 2.2rem);
+            font-weight: 700;
+            text-align: center;
+            margin: var(--space-md) auto;
+            max-width: 900px;
+            background: linear-gradient(135deg, var(--neon-purple) 0%, var(--neon-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            box-shadow:
+                0 0 40px rgba(147, 51, 234, 0.3),
+                inset 0 0 20px rgba(147, 51, 234, 0.1);
+            position: relative;
+        }
+
+        /* === NAVIGATION DOTS (Cyber Style) === */
+        .nav-dots {
+            position: fixed;
+            right: clamp(1rem, 2vw, 2rem);
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 1000;
+        }
+
+        .nav-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(147, 51, 234, 0.3);
+            border: 1px solid rgba(147, 51, 234, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: var(--neon-purple);
+            box-shadow: var(--glow-primary);
+            transform: scale(1.4);
+        }
+
+        .nav-dot:hover {
+            background: var(--neon-cyan);
+            box-shadow: var(--glow-cyan);
+            transform: scale(1.2);
+        }
+
+        /* === DATA STREAM DECORATION === */
+        .data-stream {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 2px;
+            height: 100vh;
+            background: linear-gradient(180deg,
+                transparent 0%,
+                var(--neon-purple) 50%,
+                transparent 100%);
+            opacity: 0.3;
+            animation: streamFlow 4s linear infinite;
+        }
+
+        @keyframes streamFlow {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 768px) {
+            .slide {
+                padding: var(--space-md);
+            }
+
+            .io-pair,
+            .comparison,
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-dots {
+                display: none;
+            }
+        }
+
+        /* === ANIMATIONS === */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* === ACCESSIBILITY === */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+
+            html {
+                scroll-behavior: auto;
+            }
+        }
+
+        /* === AI ACCENT ELEMENTS === */
+        .ai-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(147, 51, 234, 0.2);
+            border: 1px solid var(--neon-purple);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--brand-glow);
+            margin: 0.5rem 0;
+        }
+
+        /* === KEYBOARD HINT === */
+        .kb-hint {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: clamp(0.75rem, 1.5vw, 0.9rem);
+            color: var(--text-muted);
+            opacity: 0.5;
+            pointer-events: none;
+            text-shadow: 0 0 10px rgba(147, 51, 234, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Data Stream Effects -->
+    <div class="data-stream" style="left: 5%;"></div>
+    <div class="data-stream" style="left: 95%; animation-delay: 2s;"></div>
+
+    <!-- Navigation Dots -->
+    <div class="nav-dots" id="navDots"></div>
+
+    <!-- Keyboard Hint -->
+    <div class="kb-hint">[ ↑↓ Navigate ] [ ESC Overview ]</div>
+
+    <!-- SLIDE 1: TITLE -->
+    <section class="slide title-slide">
+        <div class="slide-content center">
+            <img src="Lingaro Logo/screen only LINGARO LOGO RGB.png"
+                 alt="Lingaro"
+                 style="height: clamp(50px, 8vw, 80px); width: auto; margin-bottom: var(--space-xl); filter: brightness(0) invert(1) drop-shadow(0 0 20px rgba(147, 51, 234, 0.6));">
+            <h1 class="reveal">AI in Business Analysis</h1>
+            <div class="ai-badge reveal">POWERED BY AI</div>
+            <h3 class="reveal" style="color: var(--text-secondary); margin-top: var(--space-md); font-weight: 400;">
+                My Journey from Skeptic to Power User
+            </h3>
+            <p style="margin-top: var(--space-xl); color: var(--text-muted); font-size: clamp(0.95rem, 2vw, 1.1rem);">
+                <strong style="color: var(--text-primary);">Kyla Salamanca</strong><br>
+                GCP Team - Data Products Delivery<br>
+                Business Analyst
+            </p>
+            <p style="margin-top: var(--space-md); font-style: italic; color: var(--neon-cyan); text-shadow: var(--glow-cyan);">
+                Achieve More With Data
+            </p>
+        </div>
+    </section>
+
+    <!-- SLIDE 2: AGENDA -->
+    <section class="slide">
+        <img src="Lingaro Logo/screen only LINGARO LOGO RGB.png" alt="Lingaro" class="slide-logo">
+        <div class="slide-content">
+            <h2 class="reveal">Today's Journey</h2>
+            <div class="reveal">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>The Barriers</h3>
+                    <p style="color: var(--text-muted); font-size: clamp(0.9rem, 1.8vw, 1rem);">
+                        Thoughts before incorporating AI
+                    </p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>The Process</h3>
+                    <p style="color: var(--text-muted); font-size: clamp(0.9rem, 1.8vw, 1rem);">
+                        How I kickstarted my AI workflow
+                    </p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>The Results</h3>
+                    <p style="color: var(--text-muted); font-size: clamp(0.9rem, 1.8vw, 1rem);">
+                        Strategic advantages and outcomes
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 3: SECTION 1 INTRO -->
+    <section class="slide">
+        <img src="Lingaro Logo/screen only LINGARO LOGO RGB.png" alt="Lingaro" class="slide-logo">
+        <div class="slide-content center">
+            <p class="section-number reveal">[ SECTION 01 ]</p>
+            <h1 class="reveal">The Barriers</h1>
+            <p class="reveal" style="font-size: clamp(1.1rem, 2.5vw, 1.5rem); color: var(--brand-glow); font-weight: 600;">
+                Thoughts Before Incorporating AI
+            </p>
+        </div>
+    </section>
+
+    <!-- SLIDE 4: BARRIER 1 -->
+    <section class="slide">
+        <img src="Lingaro Logo/screen only LINGARO LOGO RGB.png" alt="Lingaro" class="slide-logo">
+        <div class="slide-content">
+            <h2 class="reveal">The Initial Barriers</h2>
+            <div class="info-box reveal">
+                <h3 style="color: var(--neon-cyan);">⏰ "I don't have time to learn this"</h3>
+                <ul>
+                    <li>Already overwhelmed with deliverables</li>
+                    <li>Adding "one more thing" felt impossible</li>
+                    <li>Perception: High learning curve, low immediate value</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 5: BARRIER 2 -->
+    <section class="slide">
+        <img src="Lingaro Logo/screen only LINGARO LOGO RGB.png" alt="Lingaro" class="slide-logo">
+        <div class="slide-content">
+            <h2 class="reveal">The Initial Barriers</h2>
+            <div class="info-box reveal">
+                <h3 style="color: var(--neon-cyan);">❓ "I don't know where to start"</h3>
+                <ul>
+                    <li>Too many AI tools available</li>
+                    <li>Unclear which tasks AI could actually help with</li>
+                    <li>Lack of clear roadmap or framework</li>
+                    <li>No examples from other BAs in the organization</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 6: BARRIER 3 -->
+    <section class="slide">
+        <img src="Lingaro Logo/screen only LINGARO LOGO RGB.png" alt="Lingaro" class="slide-logo">
+        <div class="slide-content">
+            <h2 class="reveal">The Initial Barriers</h2>
+            <div class="info-box reveal">
+                <h3 style="color: var(--neon-pink);">😰 "Fear of being replaced"</h3>
+                <ul>
+                    <li>Concern: Will AI make my role obsolete?</li>
+                    <li>Worry about losing the human touch</li>
+                    <li>Anxiety about skills becoming outdated</li>
+                    <li>Question: What value do I add if AI can do my work?</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 7: SPOILER -->
+    <section class="slide">
+        <img src="Lingaro Logo/screen only LINGARO LOGO RGB.png" alt="Lingaro" class="slide-logo">
+        <div class="slide-content center">
+            <div class="quote reveal">
+                Spoiler: AI didn't replace me—<br>it amplified me
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 8: SECTION 2 INTRO -->
+    <section class="slide">
+        <img src="Lingaro Logo/screen only LINGARO LOGO RGB.png" alt="Lingaro" class="slide-logo">
+        <div class="slide-content center">
+            <p class="section-number reveal">[ SECTION 02 ]</p>
+            <h1 class="reveal">The Kickstart Process</h1>
+            <p class="reveal" style="font-size: clamp(1.1rem, 2.5vw, 1.5rem); color: var(--brand-glow); font-weight: 600;">
+                A Framework for Integration
+            </p>
+        </div>
+    </section>
+
+    <!-- SLIDE 9: STEP A -->
+    <section class="slide">
+        <img src="Lingaro Logo/screen only LINGARO LOGO RGB.png" alt="Lingaro" class="slide-logo">
+        <div class="slide-content">
+            <h2 class="reveal">Step A: Map Your Workflow</h2>
+            <h3 class="reveal">Identify Automation Opportunities</h3>
+            <div class="info-box reveal">
+                <strong style="color: var(--neon-cyan);">Start with a workflow audit:</strong>
+                <ul style="margin-top: var(--space-sm);">
+                    <li>Document your typical day/week</li>
+                    <li>Identify <strong>repetitive</strong> tasks</li>
+                    <li>Identify <strong>tedious</strong> tasks</li>
+                    <li>Identify <strong>documentation-heavy</strong> tasks</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 10: MY OPPORTUNITIES -->
+    <section class="slide">
+        <img src="Lingaro Logo/screen only LINGARO LOGO RGB.png" alt="Lingaro" class="slide-logo">
+        <div class="slide-content">
+            <h2 class="reveal">My Identified Opportunities</h2>
+            <div class="grid-3 reveal">
+                <div class="card">
+                    <h3 style="font-size: 2em;">📝</h3>
+                    <p>Meeting transcription → documentation</p>
+                </div>
+                <div class="card">
+                    <h3 style="font-size: 2em;">📄</h3>
+                    <p>BRD Improvement</p>
+                </div>
+                <div class="card">
+                    <h3 style="font-size: 2em;">🔄</h3>
+                    <p>Requirements updates after changes</p>
+                </div>
+                <div class="card">
+                    <h3 style="font-size: 2em;">✅</h3>
+                    <p>Test cases generation</p>
+                </div>
+                <div class="card">
+                    <h3 style="font-size: 2em;">📊</h3>
+                    <p>Data analysis of sample data</p>
+                </div>
+                <div class="card">
+                    <h3 style="font-size: 2em;">📋</h3>
+                    <p>Data Ownership Document generation</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 11: STEP B INTRO -->
+    <section class="slide">
+        <img src="Lingaro Logo/screen only LINGARO LOGO RGB.png" alt="Lingaro" class="slide-logo">
+        <div class="slide-content">
+            <h2 class="reveal">Step B: Define Input-Output Pairs</h2>
+            <div class="info-box reveal">
+                <strong style="color: var(--neon-cyan);">The Framework:</strong> For each identified task, define:
+                <ul style="margin-top: var(--space-sm);">
+                    <li>📥 <strong>Input:</strong> What you give the AI</li>
+                    <li>📤 <strong>Output:</strong> What you expect back</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 12: EXAMPLE 1 -->
+    <section class="slide">
+        <img src="Lingaro Logo/screen only LINGARO LOGO RGB.png" alt="Lingaro" class="slide-logo">
+        <div class="slide-content">
+            <h2 class="reveal">Example 1: Meeting Documentation</h2>
+            <div class="io-pair reveal">
+                <div class="io-box input">
+                    <div class="io-label">📥 INPUT</div>
+                    <p>Transcription of stakeholder meeting</p>
+                </div>
+                <div class="io-box output">
+                    <div class="io-label">📤 OUTPUT</div>
+                    <ul style="font-size: clamp(0.85rem, 1.8vw, 1rem);">
+                        <li>Meeting minutes (formatted)</li>
+                        <li>Decision logs</li>
+                        <li>Action items with owners</li>
+                        <li>Updates to existing requirements</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 13: EXAMPLE 2 -->
+    <section class="slide">
+        <img src="Lingaro Logo/screen only LINGARO LOGO RGB.png" alt="Lingaro" class="slide-logo">
+        <div class="slide-content">
+            <h2 class="reveal">Example 2: Discovery Phase</h2>
+            <div class="io-pair reveal">
+                <div class="io-box input">
+                    <div class="io-label">📥 INPUT</div>
+                    <p>Business Requirements Document (BRD)</p>
+                </div>
+                <div class="io-box output">
+                    <div class="io-label">📤 OUTPUT</div>
+                    <ul style="font-size: clamp(0.85rem, 1.8vw, 1rem);">
+                        <li>Discovery checklist</li>
+                        <li>Data Ownership Documentation</li>
+                        <li>Initial data mapping template</li>
+                        <li>Stakeholder analysis</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 14: STEP C -->
+    <section class="slide">
+        <img src="Lingaro Logo/screen only LINGARO LOGO RGB.png" alt="Lingaro" class="slide-logo">
+        <div class="slide-content">
+            <h2 class="reveal">Step C: Always Validate AI Output</h2>
+            <div class="glass-box reveal" style="text-align: center;">
+                <h3 style="color: var(--neon-cyan);">The Golden Rule: Trust but Verify</h3>
+            </div>
+            <div class="quote reveal" style="font-size: clamp(1rem, 2.5vw, 1.3rem);">
+                AI is a co-pilot, not an autopilot.<br>
+                You remain accountable for all deliverables.
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 15: STEP D -->
+    <section class="slide">
+        <img src="Lingaro Logo/screen only LINGARO LOGO RGB.png" alt="Lingaro" class="slide-logo">
+        <div class="slide-content">
+            <h2 class="reveal">Step D: Continuously Improve</h2>
+            <h3 class="reveal" style="color: var(--brand-glow);">Refinement is an ongoing process</h3>
+            <div class="info-box reveal">
+                <ul>
+                    <li><strong>Define clear rules</strong> - Document formatting standards</li>
+                    <li><strong>Be specific</strong> - Avoid vague instructions</li>
+                    <li><strong>Build knowledge base</strong> - Save successful prompts</li>
+                    <li><strong>Learn from mistakes</strong> - Analyze and refine</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 16: SECTION 3 INTRO -->
+    <section class="slide">
+        <img src="Lingaro Logo/screen only LINGARO LOGO RGB.png" alt="Lingaro" class="slide-logo">
+        <div class="slide-content center">
+            <p class="section-number reveal">[ SECTION 03 ]</p>
+            <h1 class="reveal">The Results</h1>
+            <p class="reveal" style="font-size: clamp(1.1rem, 2.5vw, 1.5rem); color: var(--brand-glow); font-weight: 600;">
+                The Strategic Advantage
+            </p>
+        </div>
+    </section>
+
+    <!-- SLIDE 17: FORMULA -->
+    <section class="slide">
+        <img src="Lingaro Logo/screen only LINGARO LOGO RGB.png" alt="Lingaro" class="slide-logo">
+        <div class="slide-content center">
+            <h2 class="reveal">The Transformation</h2>
+            <div class="formula reveal">
+                More Automation = More Efficiency<br>= More Time for Strategic Thinking
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 18: BEFORE/AFTER -->
+    <section class="slide">
+        <img src="Lingaro Logo/screen only LINGARO LOGO RGB.png" alt="Lingaro" class="slide-logo">
+        <div class="slide-content">
+            <h2 class="reveal">What Changed: Time Allocation</h2>
+            <div class="comparison reveal">
+                <div class="comparison-box before">
+                    <div class="comparison-title">⏰ Before AI</div>
+                    <ul style="font-size: clamp(0.9rem, 1.9vw, 1.1rem);">
+                        <li>Majority of time on <strong>repetitive tasks</strong></li>
+                        <li>Documentation grunt work</li>
+                        <li>Tired from tedious processes</li>
+                        <li>Limited time for strategic thinking</li>
+                    </ul>
+                </div>
+                <div class="comparison-box after">
+                    <div class="comparison-title">✨ After AI</div>
+                    <ul style="font-size: clamp(0.9rem, 1.9vw, 1.1rem);">
+                        <li>More time for <strong style="color: var(--neon-green);">creative thinking</strong></li>
+                        <li>More time for <strong style="color: var(--neon-cyan);">strategic analysis</strong></li>
+                        <li>Energy for problem-solving</li>
+                        <li>Exploring new methodologies</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 19: NEW CAPABILITIES -->
+    <section class="slide">
+        <img src="Lingaro Logo/screen only LINGARO LOGO RGB.png" alt="Lingaro" class="slide-logo">
+        <div class="slide-content">
+            <h2 class="reveal">New Capabilities Unlocked</h2>
+            <div class="grid-3 reveal">
+                <div class="card">
+                    <h3 style="font-size: 2.5em; text-align: center;">🔍</h3>
+                    <p style="text-align: center;">Deeper requirements analysis</p>
+                </div>
+                <div class="card">
+                    <h3 style="font-size: 2.5em; text-align: center;">🤝</h3>
+                    <p style="text-align: center;">More stakeholder engagement</p>
+                </div>
+                <div class="card">
+                    <h3 style="font-size: 2.5em; text-align: center;">📊</h3>
+                    <p style="text-align: center;">Proactive data analysis</p>
+                </div>
+                <div class="card">
+                    <h3 style="font-size: 2.5em; text-align: center;">🎨</h3>
+                    <p style="text-align: center;">Process improvement</p>
+                </div>
+                <div class="card">
+                    <h3 style="font-size: 2.5em; text-align: center;">🚀</h3>
+                    <p style="text-align: center;">Team workflow integration</p>
+                </div>
+                <div class="card">
+                    <h3 style="font-size: 2.5em; text-align: center;">🏗️</h3>
+                    <p style="text-align: center;">Building the BA Agent</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 20: BA EVOLUTION -->
+    <section class="slide">
+        <img src="Lingaro Logo/screen only LINGARO LOGO RGB.png" alt="Lingaro" class="slide-logo">
+        <div class="slide-content">
+            <h2 class="reveal">The BA Role Evolution</h2>
+            <div class="comparison reveal">
+                <div class="comparison-box before">
+                    <div class="comparison-title">Traditional BA</div>
+                    <ul style="font-size: clamp(0.9rem, 1.8vw, 1rem);">
+                        <li>Documentation generator</li>
+                        <li>Information collector</li>
+                        <li>Process follower</li>
+                    </ul>
+                </div>
+                <div class="comparison-box after">
+                    <div class="comparison-title">AI-Powered BA</div>
+                    <ul style="font-size: clamp(0.9rem, 1.8vw, 1rem);">
+                        <li>Strategic advisor</li>
+                        <li>Insight creator</li>
+                        <li>Process innovator</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 21: CALL TO ACTION -->
+    <section class="slide">
+        <img src="Lingaro Logo/screen only LINGARO LOGO RGB.png" alt="Lingaro" class="slide-logo">
+        <div class="slide-content">
+            <h2 class="reveal">Your Turn: Call to Action</h2>
+            <div class="reveal">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <p>Start small (pick ONE task to automate)</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <p>Define your input-output pairs</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <p>Validate everything</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <p>Iterate and improve</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <p>Share your learnings</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 22: KEY TAKEAWAY -->
+    <section class="slide">
+        <img src="Lingaro Logo/screen only LINGARO LOGO RGB.png" alt="Lingaro" class="slide-logo">
+        <div class="slide-content center">
+            <h1 class="reveal">Key Takeaway</h1>
+        </div>
+    </section>
+
+    <!-- SLIDE 23: THANK YOU -->
+    <section class="slide closing-slide">
+        <div class="slide-content center">
+            <h1 class="reveal">Thank You</h1>
+            <div class="ai-badge reveal">AI-POWERED PRESENTATION</div>
+            <h3 class="reveal" style="color: var(--text-secondary); margin-top: var(--space-md); font-weight: 400;">
+                Questions & Discussion
+            </h3>
+            <p style="margin-top: var(--space-xl); color: var(--text-muted);">
+                <strong style="color: var(--text-primary);">Kyla Salamanca</strong><br>
+                GCP Team - Data Products Delivery<br>
+                Business Analyst
+            </p>
+            <p style="margin-top: var(--space-md); font-style: italic; color: var(--neon-cyan); text-shadow: var(--glow-cyan);">
+                Achieve More With Data
+            </p>
+        </div>
+    </section>
+
+    <!-- JavaScript -->
+    <script>
+        // === NAVIGATION DOTS ===
+        const slides = document.querySelectorAll('.slide');
+        const navDots = document.getElementById('navDots');
+
+        slides.forEach((slide, index) => {
+            const dot = document.createElement('div');
+            dot.className = 'nav-dot';
+            dot.addEventListener('click', () => {
+                slide.scrollIntoView({ behavior: 'smooth' });
+            });
+            navDots.appendChild(dot);
+        });
+
+        const updateActiveDot = () => {
+            const dots = document.querySelectorAll('.nav-dot');
+            const scrollPosition = window.scrollY + window.innerHeight / 2;
+
+            slides.forEach((slide, index) => {
+                const slideTop = slide.offsetTop;
+                const slideBottom = slideTop + slide.offsetHeight;
+
+                if (scrollPosition >= slideTop && scrollPosition < slideBottom) {
+                    dots.forEach(d => d.classList.remove('active'));
+                    dots[index].classList.add('active');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', updateActiveDot);
+        updateActiveDot();
+
+        // === KEYBOARD NAVIGATION ===
+        window.addEventListener('keydown', (e) => {
+            const currentSlide = Array.from(slides).find(slide => {
+                const rect = slide.getBoundingClientRect();
+                return rect.top >= -100 && rect.top <= 100;
+            });
+
+            if (!currentSlide) return;
+            const currentIndex = Array.from(slides).indexOf(currentSlide);
+
+            if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+                e.preventDefault();
+                if (currentIndex < slides.length - 1) {
+                    slides[currentIndex + 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                e.preventDefault();
+                if (currentIndex > 0) {
+                    slides[currentIndex - 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                slides[0].scrollIntoView({ behavior: 'smooth' });
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                slides[slides.length - 1].scrollIntoView({ behavior: 'smooth' });
+            } else if (e.key === 'Escape') {
+                // Overview mode hint
+                alert('Overview: Scroll to see all slides');
+            }
+        });
+
+        // === SCROLL-BASED ANIMATIONS ===
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // Initial reveal for first slide
+        setTimeout(() => {
+            document.querySelectorAll('.slide:first-child .reveal').forEach(el => {
+                el.classList.add('visible');
+            });
+        }, 100);
+    </script>
+
+</body>
+</html>
