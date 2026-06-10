@@ -1,0 +1,1058 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Enablement for Business Analysts | 15-Min Session</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;600;700;800;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --purple: #662e90;
+      --purple-2: #8d3fd0;
+      --blue: #4da3da;
+      --cyan: #00d5ff;
+      --orange: #ed8c22;
+      --green: #2ee6a6;
+      --ink: #060812;
+      --ink-2: #0d1020;
+      --panel: rgba(13, 19, 38, .72);
+      --panel-2: rgba(255, 255, 255, .075);
+      --line: rgba(148, 213, 255, .18);
+      --text: #f8fbff;
+      --muted: #9baac4;
+      --paper: #f8fafc;
+      --paper-text: #101828;
+      --shadow: 0 30px 100px rgba(0, 0, 0, .42);
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #050711;
+      color: var(--text);
+      font-family: "Maven Pro", system-ui, sans-serif;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(circle at 20% 18%, rgba(102, 46, 144, .45), transparent 32%),
+        radial-gradient(circle at 78% 72%, rgba(77, 163, 218, .35), transparent 34%),
+        linear-gradient(135deg, #050711 0%, #0b1023 52%, #12091d 100%);
+      pointer-events: none;
+    }
+
+    .deck {
+      position: relative;
+      z-index: 1;
+      width: 100vw;
+      height: 100vh;
+      perspective: 1800px;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 34px 44px 28px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate3d(70px, 0, -90px) rotateY(-7deg);
+      transition: opacity .55s ease, transform .7s cubic-bezier(.2, .85, .2, 1);
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(5, 7, 17, .92), rgba(10, 13, 31, .82)),
+        radial-gradient(circle at 80% 20%, rgba(0, 213, 255, .12), transparent 35%);
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate3d(0, 0, 0) rotateY(0deg);
+    }
+
+    .slide.paper {
+      background:
+        radial-gradient(circle at 12% 14%, rgba(77, 163, 218, .12), transparent 26%),
+        linear-gradient(135deg, #ffffff 0%, #f3f7fb 100%);
+      color: var(--paper-text);
+    }
+
+    .slide.stage {
+      background:
+        radial-gradient(circle at 50% 34%, rgba(0, 213, 255, .22), transparent 22%),
+        radial-gradient(circle at 74% 72%, rgba(141, 63, 208, .38), transparent 34%),
+        linear-gradient(135deg, #02040d 0%, #081126 52%, #160720 100%);
+    }
+
+    .grid-bg,
+    .dot-wave,
+    .scanline {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(77, 163, 218, .09) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(77, 163, 218, .09) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 75%, transparent 100%);
+      opacity: .65;
+    }
+
+    .scanline {
+      background: linear-gradient(180deg, transparent, rgba(0, 213, 255, .08), transparent);
+      height: 220px;
+      top: -260px;
+      animation: scan 8s linear infinite;
+    }
+
+    @keyframes scan {
+      to { transform: translateY(110vh); }
+    }
+
+    .dot-wave {
+      inset: auto 0 -10px;
+      height: 230px;
+      background:
+        radial-gradient(circle, rgba(0, 213, 255, .62) 1.2px, transparent 1.4px);
+      background-size: 18px 18px;
+      clip-path: polygon(0 48%, 8% 44%, 18% 56%, 29% 39%, 41% 48%, 52% 34%, 64% 52%, 75% 42%, 88% 51%, 100% 37%, 100% 100%, 0 100%);
+      opacity: .62;
+      filter: drop-shadow(0 0 18px rgba(0, 213, 255, .45));
+    }
+
+    header {
+      position: relative;
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: 46px;
+    }
+
+    .logo {
+      height: 28px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .paper .logo { filter: none; }
+
+    .dark-logo { filter: brightness(0) invert(1); }
+
+    .timer {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: rgba(255, 255, 255, .76);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .paper .timer { color: #667085; }
+
+    .timer span {
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: rgba(255, 255, 255, .06);
+      backdrop-filter: blur(16px);
+    }
+
+    .paper .timer span {
+      background: rgba(255, 255, 255, .85);
+      border-color: #d9e2ee;
+    }
+
+    main {
+      position: relative;
+      z-index: 3;
+      min-height: 0;
+      display: grid;
+      align-items: center;
+    }
+
+    footer {
+      position: relative;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      color: rgba(255, 255, 255, .5);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .02em;
+    }
+
+    .paper footer { color: #667085; }
+
+    .progress {
+      width: 240px;
+      height: 4px;
+      border-radius: 99px;
+      background: rgba(255, 255, 255, .12);
+      overflow: hidden;
+    }
+
+    .paper .progress { background: #dde5ef; }
+
+    .progress div {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--purple), var(--blue), var(--orange));
+      border-radius: inherit;
+      transition: width .35s ease;
+    }
+
+    .kicker {
+      color: var(--cyan);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .paper .kicker { color: var(--purple); }
+
+    h1,
+    h2,
+    h3,
+    p { margin: 0; }
+
+    h1 {
+      max-width: 850px;
+      font-size: clamp(58px, 7vw, 108px);
+      line-height: .92;
+      letter-spacing: -0.045em;
+      font-weight: 900;
+    }
+
+    h2 {
+      max-width: 850px;
+      font-size: clamp(42px, 5.2vw, 78px);
+      line-height: .96;
+      letter-spacing: -0.04em;
+      font-weight: 900;
+    }
+
+    h3 {
+      font-size: 26px;
+      line-height: 1.1;
+      font-weight: 900;
+    }
+
+    .lede {
+      max-width: 660px;
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 22px;
+      line-height: 1.45;
+      font-weight: 500;
+    }
+
+    .paper .lede { color: #526174; }
+
+    .neon {
+      color: var(--cyan);
+      text-shadow: 0 0 24px rgba(0, 213, 255, .36);
+    }
+
+    .orange { color: var(--orange); }
+    .purple { color: var(--purple-2); }
+    .green { color: var(--green); }
+
+    .hero-layout {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 36px;
+      align-items: center;
+    }
+
+    .glass {
+      border: 1px solid var(--line);
+      background: linear-gradient(135deg, rgba(255, 255, 255, .11), rgba(255, 255, 255, .035));
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(22px);
+    }
+
+    .paper .glass {
+      background: rgba(255, 255, 255, .72);
+      border-color: #dbe5ef;
+      box-shadow: 0 24px 80px rgba(16, 24, 40, .12);
+    }
+
+    .metric-deck {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      padding: 20px;
+    }
+
+    .metric {
+      min-height: 118px;
+      padding: 18px;
+      border-radius: 6px;
+      background: rgba(5, 10, 24, .66);
+      border: 1px solid rgba(77, 163, 218, .16);
+    }
+
+    .paper .metric {
+      background: #ffffff;
+      border-color: #e3e9f2;
+    }
+
+    .metric .value {
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--cyan);
+      letter-spacing: -0.04em;
+    }
+
+    .metric .label {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.25;
+      font-weight: 700;
+    }
+
+    .paper .metric .label { color: #667085; }
+
+    .journey {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .journey-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 26px;
+    }
+
+    .stage-card {
+      padding: 20px;
+      min-height: 172px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid rgba(77, 163, 218, .20);
+      background: linear-gradient(135deg, rgba(102, 46, 144, .18), rgba(77, 163, 218, .055));
+    }
+
+    .stage-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -34px -44px auto;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 213, 255, .28);
+      box-shadow: 0 0 40px rgba(0, 213, 255, .12);
+    }
+
+    .stage-card .num {
+      color: var(--cyan);
+      font-size: 28px;
+      font-weight: 900;
+    }
+
+    .stage-card h3 {
+      color: #fff;
+      font-size: 22px;
+      margin-top: 12px;
+    }
+
+    .stage-card p {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .code-panel {
+      padding: 22px;
+      min-height: 330px;
+      font-family: "DM Sans", monospace;
+      color: #d7ebff;
+      background: rgba(1, 4, 13, .76);
+      border: 1px solid rgba(0, 213, 255, .19);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .code-line {
+      margin: 10px 0;
+      font-size: 18px;
+      line-height: 1.35;
+    }
+
+    .token { color: var(--cyan); }
+    .string { color: #8effc8; }
+    .comment { color: #7788a8; }
+
+    .prompt-layout {
+      grid-template-columns: .78fr 1.22fr;
+      align-items: stretch;
+    }
+
+    .prompt-layout h2 {
+      font-size: clamp(48px, 4.6vw, 82px);
+    }
+
+    .prompt-structure {
+      min-height: 0;
+    }
+
+    .prompt-example {
+      min-height: 430px;
+      padding: 22px;
+      font-family: "DM Sans", monospace;
+      color: #d7ebff;
+      background: rgba(1, 4, 13, .78);
+      border: 1px solid rgba(0, 213, 255, .22);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .prompt-example h3 {
+      color: #fff;
+      font-family: "Maven Pro", system-ui, sans-serif;
+      font-size: 24px;
+      margin-bottom: 14px;
+    }
+
+    .prompt-copy {
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .045);
+      border: 1px solid rgba(77, 163, 218, .16);
+      font-size: 17px;
+      line-height: 1.72;
+      font-weight: 750;
+    }
+
+    .prompt-role { color: var(--cyan); }
+    .prompt-goal { color: #c17dff; }
+    .prompt-context { color: #69c2ff; }
+    .prompt-output { color: #ffb35f; }
+    .prompt-constraints { color: #8effc8; }
+    .prompt-validation { color: #f8fbff; }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .matrix-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin-top: 28px;
+    }
+
+    .cell {
+      min-height: 150px;
+      padding: 18px;
+      border-radius: 8px;
+      border: 1px solid rgba(77, 163, 218, .18);
+      background: rgba(255, 255, 255, .055);
+    }
+
+    .paper .cell {
+      background: #fff;
+      border-color: #dde7f1;
+    }
+
+    .cell h3 {
+      color: var(--cyan);
+      font-size: 22px;
+    }
+
+    .paper .cell h3 { color: var(--purple); }
+
+    .cell p {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    .paper .cell p { color: #667085; }
+
+    .cell ul {
+      margin: 12px 0 0;
+      padding-left: 20px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .paper .cell ul { color: #667085; }
+
+    .llm-flow {
+      display: grid;
+      grid-template-columns: 1fr 1.05fr 1fr;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .llm-box {
+      min-height: 260px;
+      padding: 22px;
+      border-radius: 10px;
+      border: 1px solid rgba(77, 163, 218, .22);
+      background: rgba(255, 255, 255, .06);
+    }
+
+    .paper .llm-box {
+      background: #fff;
+      border-color: #dbe5ef;
+    }
+
+    .llm-box h3 {
+      color: var(--cyan);
+      margin-bottom: 16px;
+    }
+
+    .paper .llm-box h3 { color: var(--purple); }
+
+    .llm-box ul {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .paper .llm-box ul { color: #526174; }
+
+    .nav {
+      position: fixed;
+      z-index: 20;
+      right: 22px;
+      bottom: 18px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      color: rgba(255, 255, 255, .72);
+      font-size: 12px;
+      font-weight: 800;
+      opacity: .28;
+      transition: opacity .2s ease;
+    }
+
+    .nav:hover { opacity: 1; }
+
+    .nav button {
+      width: 38px;
+      height: 38px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, .18);
+      color: #fff;
+      background: rgba(255, 255, 255, .08);
+      backdrop-filter: blur(16px);
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .slide.active .reveal-1 { animation: rise .65s .08s both; }
+    .slide.active .reveal-2 { animation: rise .65s .20s both; }
+    .slide.active .reveal-3 { animation: rise .65s .34s both; }
+    .slide.active .reveal-4 { animation: rise .65s .48s both; }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(24px) scale(.985); }
+      to { opacity: 1; transform: none; }
+    }
+
+    .use-case-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .use-case-card {
+      padding: 22px;
+      min-height: 190px;
+      border-radius: 8px;
+      border: 1px solid rgba(77, 163, 218, .20);
+      background: rgba(255, 255, 255, .06);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .use-case-card::after {
+      content: "";
+      position: absolute;
+      right: -30px;
+      bottom: -36px;
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 213, 255, .24);
+    }
+
+    .use-case-card h3 {
+      color: var(--cyan);
+      font-size: 24px;
+      position: relative;
+    }
+
+    .use-case-card p {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.4;
+      position: relative;
+    }
+
+    @media (max-width: 950px) {
+      body { overflow: auto; }
+      .deck { height: auto; }
+      .slide {
+        position: relative;
+        min-height: 100vh;
+        opacity: 1;
+        pointer-events: auto;
+        transform: none;
+      }
+      .hero-layout,
+      .split,
+      .journey,
+      .journey-3,
+      .matrix,
+      .matrix-2,
+      .llm-flow,
+      .use-case-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck" id="deck">
+    <!-- Slide 1: Title -->
+    <section class="slide active stage" data-title="Introduction">
+      <div class="grid-bg"></div><div class="scanline"></div><div class="dot-wave"></div>
+      <header><div class="timer"><span>15 min</span><span>AI for Business Analysts</span></div></header>
+      <main>
+        <div class="hero-layout">
+          <div>
+            <div class="kicker reveal-1">AI Enablement for BAs</div>
+            <h1 class="reveal-2">Use AI to <span class="neon">accelerate</span> your analysis work.</h1>
+            <p class="lede reveal-3">Learn how to use AI to speed up requirements, user stories, stakeholder analysis, and process mapping without losing human judgment.</p>
+          </div>
+          <div class="glass metric-deck reveal-4">
+            <div class="metric">
+              <div class="value">Foundation</div>
+              <div class="label">Understand how AI works and what it can do</div>
+            </div>
+            <div class="metric">
+              <div class="value">3 Levels</div>
+              <div class="label">Automation, augmentation, and agency</div>
+            </div>
+            <div class="metric">
+              <div class="value">Prompts</div>
+              <div class="label">Write prompts that get useful results</div>
+            </div>
+            <div class="metric">
+              <div class="value">Practice</div>
+              <div class="label">Apply AI to real BA tasks</div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer><span>AI Enablement Session</span><div class="progress"><div></div></div><span>01</span></footer>
+    </section>
+
+    <!-- Slide 2: What You'll Learn -->
+    <section class="slide paper" data-title="Learning Outcomes">
+      <header><div class="timer"><span>Learning outcomes</span><span>Foundation before practice</span></div></header>
+      <main>
+        <div>
+          <div class="kicker reveal-1">By the end of this session</div>
+          <h2 class="reveal-2">You'll know how to use AI across your BA workflow.</h2>
+          <div class="matrix reveal-3" style="margin-top:32px;">
+            <div class="cell">
+              <h3>1. Understand</h3>
+              <p>How AI models work: context, prompts, and outputs you can trust (or not).</p>
+            </div>
+            <div class="cell">
+              <h3>2. Apply</h3>
+              <p>Map AI to automation, augmentation, and agency across your work.</p>
+            </div>
+            <div class="cell">
+              <h3>3. Prompt</h3>
+              <p>Write effective prompts that produce useful, structured results.</p>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer><span>Foundation for practical use</span><div class="progress"><div></div></div><span>02</span></footer>
+    </section>
+
+    <!-- Slide 3: How AI Works (High-Level) -->
+    <section class="slide paper" data-title="How AI Works">
+      <header><div class="timer"><span>Foundation</span><span>How AI models work</span></div></header>
+      <main>
+        <div>
+          <div>
+            <div class="kicker reveal-1">AI basics (high-level)</div>
+            <h2 class="reveal-2">AI predicts useful output from the context you provide.</h2>
+            <p class="lede reveal-3">You provide instructions and context, the model reasons over patterns, then generates a response you must review.</p>
+          </div>
+          <div class="llm-flow reveal-4" style="margin-top:34px;">
+            <div class="llm-box">
+              <h3>1. Input</h3>
+              <ul>
+                <li>Your goal</li>
+                <li>Instructions (prompt)</li>
+                <li>Files or data</li>
+                <li>Constraints</li>
+              </ul>
+            </div>
+            <div class="llm-box">
+              <h3>2. AI Processing</h3>
+              <ul>
+                <li>Text becomes tokens</li>
+                <li>Model finds patterns</li>
+                <li>Better context = better output</li>
+                <li>Noise weakens results</li>
+              </ul>
+            </div>
+            <div class="llm-box">
+              <h3>3. Output</h3>
+              <ul>
+                <li>Requirements draft</li>
+                <li>User stories</li>
+                <li>Analysis summary</li>
+                <li>Next-step plan</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer><span>Better input creates better output</span><div class="progress"><div></div></div><span>03</span></footer>
+    </section>
+
+    <!-- Slide 4: Maturity Ladder -->
+    <section class="slide stage" data-title="AI Maturity Ladder">
+      <div class="grid-bg"></div><div class="scanline"></div>
+      <header><div class="timer"><span>Framework</span><span>Three levels of AI use</span></div></header>
+      <main>
+        <div>
+          <div class="kicker reveal-1">AI maturity ladder</div>
+          <h2 class="reveal-2">Move from speed, to better thinking, to supervised workflows.</h2>
+          <div class="journey-3 reveal-3">
+            <div class="stage-card">
+              <div class="num">01</div>
+              <h3>Automation</h3>
+              <p>AI performs repeatable tasks from clear instructions. Speed and consistency.</p>
+            </div>
+            <div class="stage-card">
+              <div class="num">02</div>
+              <h3>Augmentation</h3>
+              <p>AI helps identify risks, gaps, patterns, and priorities. Better thinking.</p>
+            </div>
+            <div class="stage-card">
+              <div class="num">03</div>
+              <h3>Agency</h3>
+              <p>AI supports multi-step workflows under human supervision. Coordinated work.</p>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer><span>Start with automation, move to augmentation when ready</span><div class="progress"><div></div></div><span>04</span></footer>
+    </section>
+
+    <!-- Slide 5: BA Use Cases -->
+    <section class="slide stage" data-title="BA Use Cases">
+      <div class="grid-bg"></div>
+      <header><div class="timer"><span>BA applications</span><span>Where AI helps</span></div></header>
+      <main>
+        <div>
+          <div class="kicker reveal-1">AI for Business Analysts</div>
+          <h2 class="reveal-2">Use AI across your entire workflow.</h2>
+          <div class="use-case-grid reveal-3">
+            <div class="use-case-card">
+              <h3>Requirements Analysis</h3>
+              <p>Extract requirements from interviews, emails, and meeting notes. Identify gaps and conflicts.</p>
+            </div>
+            <div class="use-case-card">
+              <h3>User Stories</h3>
+              <p>Draft user stories with acceptance criteria from business rules and stakeholder input.</p>
+            </div>
+            <div class="use-case-card">
+              <h3>Process Mapping</h3>
+              <p>Turn narrative descriptions into structured process flows and swimlane diagrams.</p>
+            </div>
+            <div class="use-case-card">
+              <h3>Stakeholder Analysis</h3>
+              <p>Identify hidden concerns, risks, priorities, and conflicting interests from meeting notes.</p>
+            </div>
+            <div class="use-case-card">
+              <h3>Documentation</h3>
+              <p>Generate BRDs, functional specs, and traceability matrices from scattered inputs.</p>
+            </div>
+            <div class="use-case-card">
+              <h3>UAT Support</h3>
+              <p>Create test scenarios, expected results, and edge cases from requirements.</p>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer><span>AI accelerates the work; you own the judgment</span><div class="progress"><div></div></div><span>05</span></footer>
+    </section>
+
+    <!-- Slide 6: Examples by Maturity Level -->
+    <section class="slide stage" data-title="Examples by Level">
+      <div class="grid-bg"></div>
+      <header><div class="timer"><span>Practical examples</span><span>Automation to agency</span></div></header>
+      <main>
+        <div>
+          <div class="kicker reveal-1">How to apply each level</div>
+          <h2 class="reveal-2">Start simple, increase complexity as you gain confidence.</h2>
+          <div class="matrix reveal-3" style="margin-top:28px;">
+            <div class="cell">
+              <h3>Automation</h3>
+              <ul>
+                <li>Summarize interview transcripts</li>
+                <li>Extract action items from meetings</li>
+                <li>Format requirements into templates</li>
+                <li>Generate user story drafts</li>
+              </ul>
+            </div>
+            <div class="cell">
+              <h3>Augmentation</h3>
+              <ul>
+                <li>Find hidden risks or conflicts</li>
+                <li>Identify missing requirements</li>
+                <li>Spot stakeholder concerns</li>
+                <li>Suggest edge cases and scenarios</li>
+              </ul>
+            </div>
+            <div class="cell">
+              <h3>Agency</h3>
+              <ul>
+                <li>Multi-step BRD creation</li>
+                <li>Requirements traceability checks</li>
+                <li>Process flow validation</li>
+                <li>Cross-document consistency review</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer><span>Master automation before moving to augmentation or agency</span><div class="progress"><div></div></div><span>06</span></footer>
+    </section>
+
+    <!-- Slide 7: Prompt Pattern -->
+    <section class="slide" data-title="Prompt Pattern">
+      <div class="grid-bg"></div>
+      <header><div class="timer"><span>Critical skill</span><span>How to write good prompts</span></div></header>
+      <main>
+        <div class="split prompt-layout">
+          <div>
+            <div class="kicker reveal-1">Prompt structure</div>
+            <h2 class="reveal-2">Good prompts get good results.</h2>
+            <p class="lede reveal-3">Give AI the context it needs: role, goal, inputs, outputs, constraints, and validation.</p>
+            <div class="code-panel prompt-structure reveal-4" style="margin-top:24px;">
+              <div class="code-line"><span class="comment">// Reusable prompt structure</span></div>
+              <div class="code-line"><span class="prompt-role">Role:</span> <span class="string">Who should AI act as?</span></div>
+              <div class="code-line"><span class="prompt-goal">Goal:</span> What are we trying to achieve?</div>
+              <div class="code-line"><span class="prompt-context">Context:</span> What files/data to use?</div>
+              <div class="code-line"><span class="prompt-output">Output:</span> What should it produce?</div>
+              <div class="code-line"><span class="prompt-constraints">Constraints:</span> What rules to follow?</div>
+              <div class="code-line"><span class="prompt-validation">Validation:</span> How should it check itself?</div>
+            </div>
+          </div>
+          <div class="prompt-example reveal-4">
+            <h3>Example: User Story Generation</h3>
+            <div class="prompt-copy">
+              <span class="prompt-role">Act as a Business Analyst creating user stories for a data analytics platform.</span>
+              <span class="prompt-goal">Turn stakeholder interview notes into structured user stories.</span>
+              <span class="prompt-context">Use the attached interview transcript with the CFO and operations team.</span>
+              <span class="prompt-output">Create user stories in the format: As a [role], I want [capability], so that [benefit]. Include acceptance criteria for each.</span>
+              <span class="prompt-constraints">Keep stories atomic, testable, and business-focused. Do not invent technical implementation details.</span>
+              <span class="prompt-validation">Flag any assumptions separately and ask questions for unclear requirements.</span>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer><span>Prompt quality determines output quality</span><div class="progress"><div></div></div><span>07</span></footer>
+    </section>
+
+    <!-- Slide 8: Practice Example -->
+    <section class="slide paper" data-title="Practice Example">
+      <header><div class="timer"><span>Hands-on</span><span>Real BA task</span></div></header>
+      <main>
+        <div>
+          <div class="kicker reveal-1">Practice task</div>
+          <h2 class="reveal-2">Let's practice with a real scenario.</h2>
+          <p class="lede reveal-3" style="max-width: 820px;">Use AI to analyze stakeholder interviews and create a requirements summary with user stories.</p>
+          <div class="matrix-2 reveal-4">
+            <div class="cell">
+              <h3>The Task</h3>
+              <p><strong class="green">Input:</strong> Stakeholder interview transcripts (CFO, operations manager, data team lead)</p>
+              <p style="margin-top:8px;"><strong class="purple">Goal:</strong> Extract business requirements, identify conflicts, and draft user stories</p>
+              <p style="margin-top:8px;"><strong class="orange">Output:</strong> Structured requirements document with prioritized user stories</p>
+            </div>
+            <div class="cell">
+              <h3>Your Prompt Should Include</h3>
+              <ul>
+                <li>Role: Business Analyst</li>
+                <li>Goal: Extract and structure requirements</li>
+                <li>Context: Interview transcripts</li>
+                <li>Output: Requirements + user stories</li>
+                <li>Constraints: No technical assumptions</li>
+                <li>Validation: Flag conflicts and gaps</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer><span>Try this with your own project inputs</span><div class="progress"><div></div></div><span>08</span></footer>
+    </section>
+
+    <!-- Slide 9: Key Takeaways -->
+    <section class="slide stage" data-title="Key Takeaways">
+      <div class="grid-bg"></div><div class="scanline"></div>
+      <header><div class="timer"><span>Summary</span><span>Remember these</span></div></header>
+      <main>
+        <div>
+          <div class="kicker reveal-1">Key takeaways</div>
+          <h2 class="reveal-2">Remember these principles as you start using AI.</h2>
+          <div class="journey reveal-3">
+            <div class="stage-card">
+              <div class="num">01</div>
+              <h3>Start Small</h3>
+              <p>Begin with automation tasks. Master those before moving to augmentation or agency.</p>
+            </div>
+            <div class="stage-card">
+              <div class="num">02</div>
+              <h3>Context Matters</h3>
+              <p>Better prompts with clear context produce better results. Garbage in, garbage out.</p>
+            </div>
+            <div class="stage-card">
+              <div class="num">03</div>
+              <h3>Always Review</h3>
+              <p>AI outputs require human validation. You own the final judgment, not the AI.</p>
+            </div>
+            <div class="stage-card">
+              <div class="num">04</div>
+              <h3>Iterate</h3>
+              <p>Refine your prompts based on results. Learn what works for your specific use cases.</p>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer><span>AI is a tool, not a replacement for BA judgment</span><div class="progress"><div></div></div><span>09</span></footer>
+    </section>
+
+    <!-- Slide 10: Next Steps -->
+    <section class="slide stage" data-title="Next Steps">
+      <div class="grid-bg"></div><div class="scanline"></div><div class="dot-wave"></div>
+      <header><div class="timer"><span>Getting started</span><span>What to do next</span></div></header>
+      <main>
+        <div>
+          <div class="kicker reveal-1">Next steps</div>
+          <h2 class="reveal-2">Start using AI on <span class="neon">your projects</span> today.</h2>
+          <div class="matrix reveal-3" style="margin-top:38px;">
+            <div class="cell">
+              <h3>1. Pick One Task</h3>
+              <p>Choose a simple automation task from your current project. Interview summary, user story draft, or requirements extraction.</p>
+            </div>
+            <div class="cell">
+              <h3>2. Write a Prompt</h3>
+              <p>Use the role-goal-context-output-constraints-validation structure. Be specific about what you need.</p>
+            </div>
+            <div class="cell">
+              <h3>3. Review & Refine</h3>
+              <p>Check the AI output. Where did it succeed? Where did it fail? Adjust your prompt and try again.</p>
+            </div>
+          </div>
+          <p class="lede reveal-4" style="margin-top:32px; text-align:center; max-width:100%;">
+            <strong class="neon">Practice makes progress.</strong> The more you use AI, the better you'll understand what works for your workflow.
+          </p>
+        </div>
+      </main>
+      <footer><span>Questions? Let's discuss!</span><div class="progress"><div></div></div><span>10</span></footer>
+    </section>
+
+  </div>
+
+  <div class="nav">
+    <button type="button" id="prev" aria-label="Previous slide">‹</button>
+    <span id="count">1 / 10</span>
+    <button type="button" id="next" aria-label="Next slide">›</button>
+  </div>
+
+  <script>
+    const slides = [...document.querySelectorAll(".slide")];
+    const count = document.getElementById("count");
+    let current = 0;
+
+    function update() {
+      slides.forEach((slide, index) => slide.classList.toggle("active", index === current));
+      count.textContent = `${current + 1} / ${slides.length}`;
+      document.querySelectorAll(".progress div").forEach((bar) => {
+        bar.style.width = `${((current + 1) / slides.length) * 100}%`;
+      });
+      location.hash = `slide-${current + 1}`;
+    }
+
+    function go(delta) {
+      current = Math.max(0, Math.min(slides.length - 1, current + delta));
+      update();
+    }
+
+    document.getElementById("prev").addEventListener("click", () => go(-1));
+    document.getElementById("next").addEventListener("click", () => go(1));
+
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight" || event.key === "PageDown" || event.key === " ") go(1);
+      if (event.key === "ArrowLeft" || event.key === "PageUp") go(-1);
+      if (event.key === "Home") { current = 0; update(); }
+      if (event.key === "End") { current = slides.length - 1; update(); }
+    });
+
+    const hashMatch = location.hash.match(/slide-(\d+)/);
+    if (hashMatch) current = Math.max(0, Math.min(slides.length - 1, Number(hashMatch[1]) - 1));
+    update();
+  </script>
+</body>
+</html>
