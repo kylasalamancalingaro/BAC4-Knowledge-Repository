@@ -1,26 +1,19 @@
-# BA Agent Project
+# Business Analyst Knowledge Repository
 
 ## Overview
-BA Agent is a business analysis agent designed to assist with business analysis tasks for the GCP data products delivery team.
+This repository serves as a knowledge management system for Business Analyst useful internal information, documentation, guides, and resources.
 
 ## Project Structure
-- `ba_agent.py` - Main agent implementation
-- `pii_masker.py` - PII masking utility for handling sensitive data
-- `outputs/` - Agent outputs and analysis results
-- `GCP/` - GCP-related documentation and resources
-- `README.md` - Project documentation
-- `Skill.md` - Agent skills documentation
+- `Claude VSCode Setup/` - Setup guides for Claude Code extension
+- `GitHub-Starter-Guide.md` - GitHub usage documentation
+- `skills/` - Presentation templates and AI workflow documentation
+- `KANBAN_USAGE.md` - Task management documentation
+- Various HTML documentation files for internal processes
 
-## Development Guidelines
-- Use Python 3.11+
-- Follow PEP 8 style guidelines
-- Ensure PII masking is applied to all sensitive data
-- Document all agent skills and capabilities in Skill.md
-- Keep dependencies minimal and well-documented
-
-## Agent Capabilities
-The BA Agent is being developed to handle business analysis tasks including:
-- Requirements analysis
-- Documentation generation
-- Data product analysis
-- Stakeholder communication support
+## Purpose
+Central repository for:
+- Internal BA documentation
+- Process guides and frameworks
+- Presentation templates
+- Tool setup instructions
+- Best practices and workflows
